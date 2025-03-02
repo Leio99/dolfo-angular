@@ -3,7 +3,7 @@
   "compilerOptions": {
     "paths": {
       "DolfoAngular": [
-        "./dist/dolfo-angular"
+        "./dist"
       ]
     },
     "outDir": "./dist",

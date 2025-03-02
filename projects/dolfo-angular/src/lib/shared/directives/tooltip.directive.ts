@@ -1,6 +1,6 @@
 import { Directive, ElementRef, Input } from "@angular/core"
 import { filter, fromEvent } from "rxjs"
-import { Subscriptable } from "../classes"
+import { Subscriptable } from "../classes/subscriptable"
 import { ITooltip, TooltipDirection } from "../interfaces"
 import { TooltipService } from "../services"
 
