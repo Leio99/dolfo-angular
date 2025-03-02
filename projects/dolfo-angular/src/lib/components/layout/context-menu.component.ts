@@ -36,7 +36,7 @@ export class ContextMenuComponent extends Subscriptable implements IContextMenu,
         this.addSubscription(race([
             fromEvent(this.ref.nativeElement, "contextmenu"),
             fromEvent(document.body, "click"),
-            fromEvent(window, "scroll")
+            fromEvent(window, "scroll", { capture: true })
         ]).subscribe(this.destroyFn))
     }
 
