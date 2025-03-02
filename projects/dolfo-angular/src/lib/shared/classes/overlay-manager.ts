@@ -1,11 +1,10 @@
 import { ComponentRef, createComponent, EnvironmentInjector, Injector, ViewContainerRef } from "@angular/core"
-import equal from "deep-equal"
 import { distinctUntilChanged, filter, tap } from "rxjs"
 import { CONTEXT_MENU_DESTROY_TOKEN, ContextMenuComponent } from "../../components/layout/context-menu.component"
 import { DialogComponent } from "../../components/layout/dialog-layout/dialog.component"
 import { NotificationComponent } from "../../components/layout/notification.component"
 import { TOOLTIP_DESTROY_TOKEN, TooltipComponent } from "../../components/layout/tooltip.component"
-import { IDialogInput } from "../interfaces"
+import { IDialogInput, isDeepEqual } from "../interfaces"
 import { ContextMenuService, DialogService, NotificationService, TooltipService } from "../services"
 
 export class OverlayManager{
@@ -22,7 +21,7 @@ export class OverlayManager{
         environmentInjector = injector.get(EnvironmentInjector)
 
         ds.getDialog$().pipe(
-            distinctUntilChanged((a, b) => equal(a, b)),
+            distinctUntilChanged((a, b) => isDeepEqual(a, b)),
             tap(() => {
                 if(this.dialog)
                     this.dialog.destroy()
@@ -40,7 +39,7 @@ export class OverlayManager{
         })
         
         ns.getNotification$().pipe(
-            distinctUntilChanged((a, b) => equal(a, b)),
+            distinctUntilChanged((a, b) => isDeepEqual(a, b)),
             tap(() => {
                 if(this.notification)
                     this.notification.destroy()
@@ -74,7 +73,7 @@ export class OverlayManager{
         })
 
         cs.getContextMenu$().pipe(
-            distinctUntilChanged((a, b) => equal(a, b)),
+            distinctUntilChanged((a, b) => isDeepEqual(a, b)),
             tap(() => {
                 if(this.contextMenu)
                     this.contextMenu.destroy()

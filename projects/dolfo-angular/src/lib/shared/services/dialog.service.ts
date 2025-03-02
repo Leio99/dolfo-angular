@@ -12,6 +12,8 @@ export class DialogService{
 
     constructor(private ts: TranslateService){}
 
+    public getDialog = () => this.dialog$.getValue()
+
     public getDialog$ = () => this.dialog$.asObservable()
 
     public openDialog = (input: IDialogInput) => {

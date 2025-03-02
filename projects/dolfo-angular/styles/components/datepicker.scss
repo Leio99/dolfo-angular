@@ -1,0 +1,9 @@
+.input-container input[type="date"]{
+    @include base-input;
+    @include rounded;
+    @include pointer;
+
+    &::-webkit-calendar-picker-indicator{
+        @include pointer
+    }
+}

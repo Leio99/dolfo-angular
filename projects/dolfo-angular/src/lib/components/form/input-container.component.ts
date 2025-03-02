@@ -1,7 +1,7 @@
 import { Component, ElementRef } from "@angular/core"
 import { ValidationErrors } from "@angular/forms"
-import equal from "deep-equal"
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from "rxjs"
+import { isDeepEqual } from "../../shared/interfaces"
 import { BaseFormInput } from "./base-form-input"
 
 @Component({
@@ -31,7 +31,7 @@ import { BaseFormInput } from "./base-form-input"
 export class InputContainerComponent{
     public errors$ = new BehaviorSubject<ValidationErrors>(null)
     public decodedError$: Observable<[string, Record<string, string>?]> = this.errors$.pipe(
-        distinctUntilChanged((a, b) => equal(a, b)),
+        distinctUntilChanged((a, b) => isDeepEqual(a, b)),
         map(val => {
             if(val){
                 if(val.required)

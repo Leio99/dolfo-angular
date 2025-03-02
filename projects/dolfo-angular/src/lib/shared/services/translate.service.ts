@@ -28,9 +28,11 @@ export class TranslateService {
             this.lang$.next(foundLang)
     }
 
-    public changeLanguage$ = (lang: ILanguage) => {
-        if(this.langs.some(l => l.name === lang.name))
-            localStorage.setItem(TRANSLATE_STORAGE_KEY, lang.name)
+    public changeLanguage$ = (langName: string) => {
+        const lang = this.langs.find(l => l.name === langName)
+
+        if(lang)
+            localStorage.setItem(TRANSLATE_STORAGE_KEY, langName)
 
         return this.load$(lang).pipe(
             tap(() => this.lang$.next(lang))

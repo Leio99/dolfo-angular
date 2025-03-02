@@ -1,8 +1,8 @@
 import { AfterViewInit, Directive, EventEmitter, inject, Input, OnInit, Output, ViewChild } from "@angular/core"
 import { AbstractControl, ControlContainer, ControlValueAccessor, FormControl, ValidationErrors, Validator, Validators } from "@angular/forms"
-import equal from "deep-equal"
 import { filter } from "rxjs"
 import { Subscriptable } from "../../shared/classes/subscriptable"
+import { isDeepEqual } from "../../shared/interfaces"
 import { InputContainerComponent } from "./input-container.component"
 
 @Directive()
@@ -25,7 +25,7 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
         const initialValue = this.control.value
 
         this.addSubscription(this.input.valueChanges.pipe(
-            filter(v => !this.control.touched && !equal(initialValue, v))
+            filter(v => !this.control.touched && !isDeepEqual(initialValue, v))
         ).subscribe(() => this.control.markAsTouched()))
 
         this.addSubscription(this.control.statusChanges.pipe(

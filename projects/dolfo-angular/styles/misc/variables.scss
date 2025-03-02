@@ -19,13 +19,3 @@ $colors: (
     "white": $white,
     "info": $info
 );
-
-@each $key, $color in $colors{
-    .fg-#{$key}{
-        color: $color
-    }
-    
-    .bg-#{$key}{
-        background-color: $color
-    }
-}

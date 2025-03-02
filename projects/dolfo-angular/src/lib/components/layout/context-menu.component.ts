@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, ElementRef, inject, InjectionToken, Input, OnInit } from "@angular/core"
-import { fromEvent } from "rxjs"
+import { fromEvent, race } from "rxjs"
 import { Subscriptable } from "../../shared/classes"
 import { ContextMenuItem, IContextMenu } from "../../shared/interfaces"
 
@@ -33,8 +33,11 @@ export class ContextMenuComponent extends Subscriptable implements IContextMenu,
     private destroyFn = inject(CONTEXT_MENU_DESTROY_TOKEN)
 
     ngOnInit() {
-        this.addSubscription(fromEvent(this.ref.nativeElement, "contextmenu").subscribe(this.destroyFn))
-        this.addSubscription(fromEvent(document.body, "click").subscribe(this.destroyFn))
+        this.addSubscription(race([
+            fromEvent(this.ref.nativeElement, "contextmenu"),
+            fromEvent(document.body, "click"),
+            fromEvent(window, "scroll")
+        ]).subscribe(this.destroyFn))
     }
 
     public clickItem = (item: ContextMenuItem) => {

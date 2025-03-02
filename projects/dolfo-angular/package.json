@@ -1,14 +1,13 @@
 {
     "name": "dolfo-angular",
-    "version": "1.0.0",
+    "version": "1.6.0",
     "scripts": {
         "update-version": "npm --no-git-tag-version version minor"
     },
     "peerDependencies": {
         "@angular/common": "^18.2.0",
         "@angular/core": "^18.2.0",
-        "@angular/forms": "^19.2.0",
-        "deep-equal": "^2.2.3"
+        "@angular/forms": "^19.2.0"
     },
     "dependencies": {
         "tslib": "^2.3.0"
@@ -17,7 +16,6 @@
     "devDependencies": {
         "@angular-devkit/build-angular": "^19.2.0",
         "@angular/build": "^19.2.0",
-        "@types/deep-equal": "^1.0.4",
         "@types/node": "^22.13.8"
     }
 }

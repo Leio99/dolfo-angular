@@ -1,10 +1,13 @@
-@use "sass:color";
-@use "sass:map";
-@use "sass:list";
-@import "fonts/icons";
-@import "misc/mixins";
-@import "misc/functions";
-@import "misc/variables";
+@each $key, $color in $colors{
+    .fg-#{$key}{
+        color: $color
+    }
+    
+    .bg-#{$key}{
+        background-color: $color
+    }
+}
+
 @import "misc/reset";
 @import "misc/animation";
 @import "components/button";
@@ -12,5 +15,6 @@
 @import "components/notification";
 @import "components/tooltip";
 @import "components/input";
+@import "components/datepicker";
 @import "components/contextmenu";
 @import "components/grid";
