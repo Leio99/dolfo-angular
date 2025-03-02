@@ -75,4 +75,6 @@ export class TranslateService {
     private getLocale = () => this.getLang()?.locale || "en-US"
 
     public formatDate = (d: string) => formatDate(new Date(d), this.translate("dateFormat"), this.getLocale())
+
+    public formatDateTime = (d: string) => formatDate(new Date(d), this.translate("dateTimeFormat"), this.getLocale())
 }

@@ -20,6 +20,8 @@ export class GridComponent<T>{
 
         if(dataType === ColumnDataType.DATE)
 			value = this.translateService.formatDate(value)
+        else if(dataType === ColumnDataType.DATETIME)
+			value = this.translateService.formatDateTime(value)
 
         return formatter ? formatter(value) : value
     }

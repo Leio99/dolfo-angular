@@ -8,7 +8,7 @@ export enum ColumnAlign{
     CENTER = "center"
 }
 
-export enum ColumnDataType{ TEXT, DATE }
+export enum ColumnDataType{ TEXT, DATE, DATETIME }
 
 export interface GridAction{
     readonly icon: string
