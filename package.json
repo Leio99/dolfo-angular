@@ -1,5 +1,5 @@
 {
-    "version": "1.0.1",
+    "version": "1.0.0",
     "scripts": {
         "build-library": "ng build DolfoAngular",
         "new-version": "cd projects/dolfo-angular && npm run update-version && cd ../.. && npm run build-library",
