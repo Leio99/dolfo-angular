@@ -1,6 +1,7 @@
 import { FormControl } from "@angular/forms"
 import { ButtonColor } from "./button"
 import { InputType } from "./form"
+import { IconName } from "./icon"
 
 export enum DialogActionType{ OK, NO, CANCEL }
 
@@ -40,7 +41,7 @@ export type DialogIcon = {
 export type DialogFooterButton = {
     label: string
     color: ButtonColor
-    icon?: string
+    icon?: IconName
     disabled?: boolean
     loading?: boolean
     onClick: () => void

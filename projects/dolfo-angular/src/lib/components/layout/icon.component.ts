@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
+import { IconName } from "../../shared/interfaces"
 
 @Component({
   selector: "dolfo-icon",
@@ -7,5 +8,5 @@ import { ChangeDetectionStrategy, Component, Input } from "@angular/core"
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconComponent {
-  @Input({ required: true }) name: string
+  @Input({ required: true }) name: IconName
 }
