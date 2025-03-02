@@ -35,7 +35,8 @@ export class ContextMenuComponent extends Subscriptable implements IContextMenu,
     ngOnInit() {
         this.addSubscription(race([
             fromEvent(this.ref.nativeElement, "contextmenu"),
-            fromEvent(document.body, "click"),
+            fromEvent(window, "click"),
+            fromEvent(window, "resize"),
             fromEvent(window, "scroll", { capture: true })
         ]).subscribe(this.destroyFn))
     }
