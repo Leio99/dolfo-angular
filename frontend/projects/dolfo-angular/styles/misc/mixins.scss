@@ -1,0 +1,121 @@
+@mixin pointer{
+    cursor: pointer
+}
+
+@mixin flex{
+    display: flex
+}
+
+@mixin inline-flex{
+    display: inline-flex
+}
+
+@mixin block{
+    display: block
+}
+
+@mixin inline-block{
+    display: inline-block
+}
+
+@mixin inline{
+    display: inline
+}
+
+@mixin hidden{
+    display: none
+}
+
+@mixin align-center{
+    align-items: center
+}
+
+@mixin justify-center{
+    justify-content: center
+}
+
+@mixin centered-flex{
+    @include flex;
+    @include align-center;
+    @include justify-center
+}
+
+@mixin absolute{
+    position: absolute
+}
+
+@mixin relative{
+    position: relative
+}
+
+@mixin fixed{
+    position: fixed
+}
+
+@mixin sticky{
+    position: sticky
+}
+
+@mixin base-pseudo{
+    @include block;
+    content: "";
+}
+
+@mixin disabled{
+    opacity: 0.6;
+    cursor: not-allowed
+}
+
+@mixin disabled-events{
+    @include disabled;
+    pointer-events: none
+}
+
+@mixin no-outline{
+    outline: none !important
+}
+
+@mixin ellipsis-text{
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: pre
+}
+
+@mixin underline{
+    text-decoration: underline
+}
+
+@mixin rounded{
+    border-radius: 5px
+}
+
+@mixin text-center{
+    text-align: center
+}
+
+@mixin text-right{
+    text-align: right
+}
+
+@mixin text-left{
+    text-align: left
+}
+
+@mixin align-middle{
+    vertical-align: middle
+}
+
+@mixin pseudo-btn($prefix: ""){
+    @each $key, $color in $colors{
+        &.#{$prefix + $key}{
+            background-color: $color;
+            color: getButtonTextColor($color);
+
+            &:not([disabled]):hover{
+                $newColor: color.adjust($color, $lightness: -5%);
+                background-color: $newColor;
+                color: getButtonTextColor($newColor);
+            }
+        }
+    }
+}

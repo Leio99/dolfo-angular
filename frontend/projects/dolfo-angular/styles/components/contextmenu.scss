@@ -1,0 +1,54 @@
+.context-menu{
+    @include fixed;
+    @include rounded;
+    @include flex;
+    flex-direction: column;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.3);
+    background-color: $white;
+    overflow: hidden;
+    min-width: max-content;
+    animation: showContextMenu 0.1s ease forwards;
+    z-index: 2;
+    
+    &.position-bottom-left{
+        transform-origin: top left
+    }
+    &.position-bottom-right{
+        transform-origin: top right;
+        translate: -100% 0
+    }
+    &.position-top-right{
+        transform-origin: bottom right;
+        translate: -100% -100%
+    }
+    &.position-top-left{
+        transform-origin: bottom left;
+        translate: 0 -100%
+    }
+
+    > div{
+        @include inline-flex;
+        @include align-center;
+        gap: 5px;
+        padding: 3px 10px;
+
+        &:not(.disabled){
+            @include pointer;
+
+            &:hover{
+                background-color: rgba(0, 0, 0, 0.1)
+            }
+        }
+
+        &.disabled{
+            pointer-events: none;
+            background-color: rgba(0, 0, 0, 0.1);
+            opacity: 0.4
+        }
+    }
+}
+
+@keyframes showContextMenu{
+    from{ transform: scale(0) }
+    to{ transform: scale(1) }
+}

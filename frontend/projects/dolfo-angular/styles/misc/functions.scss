@@ -1,0 +1,7 @@
+@function getButtonTextColor($color){
+    @if(color.channel($color, "lightness", $space: hsl) > 80){
+        @return $black;
+    }@else{
+        @return $white;
+    }
+}

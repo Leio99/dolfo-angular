@@ -1,0 +1,61 @@
+@let loading = config.isLoading$() | async;
+
+<div class="grid-container" [class.loading]="loading">
+    @if(loading){
+        <div class="grid-loading">
+            <dolfo-icon name="spinner2"></dolfo-icon>
+        </div>
+    }
+
+    <table>
+        @let columns = config.getColumns();
+        @let showActions = config.hasActions;
+        @let colSpan = columns.length + (showActions ? 1 : 0);
+    
+        <thead>
+            <tr>
+                @for(col of columns; track col.label){
+                    <th [ngStyle]="{ width: col.width + 'px', maxWidth: col.width + 'px' }">{{ col.label | translate }}</th>
+                }
+    
+                @if(showActions){
+                    <th>{{ "grid.actions" | translate }}</th>
+                }
+            </tr>
+        </thead>
+    
+        <tbody>
+            @let list = config.getList$() | async;
+            
+            @if(list.length > 0){
+                @for(item of list; track config.getUniqueId(item)){
+                    @let itemActions = config.getActions(item);
+                    @let rowClass = config.getRowClass(item);
+    
+                    <tr (click)="config.getEvents()?.onRowClick(item)" [dolfoContextMenu]="itemActions" position="bottom-right">
+                        @for(col of columns; track col.label){
+    
+                            <td [ngStyle]="{ width: col.width + 'px' }" [ngClass]="rowClass" [class.align-right]="col.align === 'right'" [class.align-center]="col.align === 'center'">
+                                {{ resolveField(item, col) }}
+                            </td>
+                        }
+            
+                        @if(showActions){
+                            <td class="align-center actions" [ngClass]="rowClass">
+                                @if(itemActions.length > 0){
+                                    <dolfo-button color="secondary" [dolfoTooltip]="'grid.showActions' | translate" [dolfoContextMenu]="itemActions" position="bottom-right" openOnClick>
+                                        <dolfo-icon name="flickr"></dolfo-icon>
+                                    </dolfo-button>
+                                }
+                            </td>
+                        }
+                    </tr>
+                }
+            }@else {
+                <tr>
+                    <td [colSpan]="colSpan" class="align-center">{{ "grid.noResults" | translate }}</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

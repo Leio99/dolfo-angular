@@ -1,0 +1,29 @@
+button{
+    @include pointer;
+    @include inline-flex;
+    @include align-center;
+    @include justify-center;
+    @include pseudo-btn('color-');
+    gap: 7px;
+    padding: 0.3rem 0.7rem;
+    border-radius: 3px;
+    border: 0;
+
+    &[disabled]{
+        opacity: 0.7
+    }
+
+    @each $key, $color in $colors{
+        &.color-#{$key}{
+            &:not([disabled]):focus{
+                $newColor: color.adjust($color, $lightness: -10%);
+                background-color: $newColor;
+                color: getButtonTextColor($newColor);
+            }
+        }
+    }
+}
+
+dolfo-button{
+    @include inline-flex
+}

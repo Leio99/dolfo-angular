@@ -1,0 +1,61 @@
+@mixin base-input(){
+    @include block;
+    @include rounded;
+    padding: 0.5rem 1rem;
+    background-color: $white;
+    border: 1px solid #888;
+    width: 100%;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    font: inherit;
+
+    &::placeholder{
+        color: $placeholder
+    }
+}
+
+.input-container{
+    margin-bottom: 0.5rem;
+
+    > label{
+        @include block;
+        font-weight: 600;
+        
+        > span{
+            color: $error;
+            font-size: small
+        }
+    }
+
+    &.error{
+        input[type="text"], input[type="password"], input[type="email"], textarea{
+            border-color: $error !important;
+            background-color: rgba(217, 16, 16, 0.07) !important;
+            box-shadow: 0 2px 2px rgba(217, 16, 16, 0.1) !important
+        }
+    }
+
+    .input-errors{
+        font-size: small;
+        color: $error
+    }
+
+    input[type="text"], input[type="password"], input[type="email"], textarea{
+        @include base-input;
+
+        &:focus{
+            border-color: $primary;
+            background-color: rgba(0, 0, 0, 0.04);
+            box-shadow: 0 2px 2px $primaryFocusShadow;
+        }
+
+        &[disabled]{
+            cursor: not-allowed;
+            color: #666
+        }
+    }
+
+    textarea{
+        resize: none;
+        min-height: 100px
+    }
+}

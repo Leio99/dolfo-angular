@@ -1,0 +1,31 @@
+$primary: #1d72e2;
+$primaryFocusShadow: rgba(37, 136, 250, 0.2);
+$secondary: #eee;
+$error: #d91010;
+$success: #1dad1d;
+$warning: #d6ac15;
+$white: #fff;
+$lightGrey: #ccc;
+$black: #000;
+$info: #148dea;
+$placeholder: #777;
+
+$colors: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "error": $error,
+    "success": $success,
+    "warning": $warning,
+    "white": $white,
+    "info": $info
+);
+
+@each $key, $color in $colors{
+    .fg-#{$key}{
+        color: $color
+    }
+    
+    .bg-#{$key}{
+        background-color: $color
+    }
+}

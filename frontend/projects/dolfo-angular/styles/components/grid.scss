@@ -1,0 +1,108 @@
+.grid-container{
+    $smallRound: 5px;
+    
+    @include relative;
+    overflow: auto;
+    width: 100%;
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    border-radius: $smallRound;
+
+    .grid-loading{
+        @include absolute;
+        @include centered-flex;
+        background-color: rgba(255, 255, 255, 0.5);
+        font-size: 30px;
+        top: 0;
+        right: 0;
+        left: 0;
+        bottom: 0;
+        color: $placeholder;
+        z-index: 2
+    }
+    
+    table{
+        width: 100%;
+        border-spacing: 0;
+        $border: 1px solid color.adjust($lightGrey, $lightness: 10%);
+    
+        td, th{
+            @include ellipsis-text;
+            border-right: $border;
+            border-top: $border;
+            background-color: $white;
+            padding: 0.3rem 0.5rem;
+            max-width: 0;
+            min-width: 80px;
+    
+            &.actions{
+                width: 0;
+    
+                button{
+                    border-radius: 50px;
+                    font-size: small
+                }
+            }
+    
+            &:first-child{
+                border-left: $border
+            }
+    
+            &.align-left{
+                text-align: left
+            }
+    
+            &.align-right{
+                text-align: right
+            }
+    
+            &.align-center{
+                text-align: center
+            }
+        }
+    
+        tr:last-child td{
+            border-bottom: $border;
+    
+            &:first-child{
+                border-bottom-left-radius: $smallRound
+            }
+    
+            &:last-child{
+                border-bottom-right-radius: $smallRound
+            }
+        }
+    
+        thead tr{
+            background-color: $white;
+            
+            th{
+                @include relative;
+                text-align: center;
+                border-top: $border;
+                font-weight: 700
+            }
+    
+            &:first-child{
+                th:first-child{
+                    border-top-left-radius: $smallRound
+                }
+                
+                th:last-child{
+                    border-top-right-radius: $smallRound
+                }
+            }
+        }
+    
+        tbody tr{ 
+            @include pointer;
+    
+            &:hover td{
+                background-color: color.adjust($lightGrey, $lightness: 15%)
+            }
+    
+            &.focused td{
+                background-color: color.adjust($primary, $lightness: 44%)
+            }
+        }
+    }
+}

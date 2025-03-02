@@ -1,0 +1,59 @@
+.notification{
+    @include fixed;
+    @include flex;
+    @include pointer;
+    @include rounded;
+    top: 10px;
+    right: 10px;
+    flex-direction: column;
+    padding: 5px 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+    z-index: 2;
+    animation: popUp 0.5s ease forwards;
+    max-width: 500px;
+
+    &:hover{
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.5)
+    }
+
+    .notification-action{
+        @include text-right;
+        padding-top: 5px;
+        opacity: 0.8;
+
+        button{
+            padding: 0.2rem 0.5rem;
+            font-size: small
+        }
+    }
+
+    .notification-header h6{
+        margin: 0;
+        font-weight: bold
+    }
+
+    &.success{
+        background-color: color.adjust($success, $lightness: 55%);
+        color: $success
+    }
+
+    &.warning{
+        background-color: color.adjust($warning, $lightness: 48%);
+        color: $warning
+    }
+
+    &.info{
+        background-color: color.adjust($info, $lightness: 45%);
+        color: $info
+    }
+
+    &.error{
+        background-color: color.adjust($error, $lightness: 50%);
+        color: $error
+    }
+}
+
+@keyframes popUp{
+    from{ opacity: 0 }
+    to{ opacity: 1 }
+}

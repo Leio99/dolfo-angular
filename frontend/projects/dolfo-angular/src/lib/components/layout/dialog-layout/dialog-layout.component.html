@@ -1,0 +1,19 @@
+<div class="dialog">
+    <div class="dialog-inner" [ngStyle]="{ width: width + 'px' }">
+        @if(header){
+            <div class="dialog-header">
+                <ng-content *ngTemplateOutlet="header.template"></ng-content>
+            </div>
+        }
+        @if(content){
+            <div class="dialog-content">
+                <ng-content *ngTemplateOutlet="content.template"></ng-content>
+            </div>
+        }
+        @if(footer){
+            <div class="dialog-footer">
+                <ng-content *ngTemplateOutlet="footer.template"></ng-content>
+            </div>
+        }
+    </div>
+</div>

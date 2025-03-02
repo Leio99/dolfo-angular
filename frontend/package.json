@@ -1,0 +1,13 @@
+{
+    "version": "1.0.1",
+    "scripts": {
+        "build-library": "ng build DolfoAngular",
+        "new-version": "cd projects/dolfo-angular && npm run update-version && cd ../.. && npm run build-library",
+        "publish-library": "npm publish dist/dolfo-angular"
+    },
+    "devDependencies": {
+        "@angular-devkit/build-angular": "^19.2.0",
+        "@angular/build": "^19.2.0",
+        "ng-packagr": "^19.2.0"
+    }
+}
