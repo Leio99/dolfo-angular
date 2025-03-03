@@ -3,7 +3,11 @@
     -webkit-box-sizing: border-box
 }
 
-html, body{
+html{
+    overflow: hidden
+}
+
+body{
     font-size: 16px;
     font-weight: 400;
     line-height: 1.575;
