@@ -13,83 +13,84 @@ export class OverlayManager{
     private tooltip: ComponentRef<TooltipComponent>
     private contextMenu: ComponentRef<ContextMenuComponent>
     
-    constructor(injector: Injector, container: ViewContainerRef){
-        const ds = injector.get(DialogService),
-        ns = injector.get(NotificationService),
-        ts = injector.get(TooltipService),
-        cs = injector.get(ContextMenuService),
-        environmentInjector = injector.get(EnvironmentInjector)
+    constructor(private injector: Injector, private container: ViewContainerRef){}
 
-        ds.getDialog$().pipe(
-            distinctUntilChanged((a, b) => isDeepEqual(a, b)),
-            tap(() => {
-                if(this.dialog)
-                    this.dialog.destroy()
+    public init = () => {
+        const ds = this.injector.get(DialogService),
+        ns = this.injector.get(NotificationService),
+        ts = this.injector.get(TooltipService),
+        cs = this.injector.get(ContextMenuService),
+        environmentInjector = this.injector.get(EnvironmentInjector)
+
+        return [
+            ds.getDialog$().pipe(
+                distinctUntilChanged((a, b) => isDeepEqual(a, b)),
+                tap(() => {
+                    if(this.dialog)
+                        this.dialog.destroy()
+                }),
+                filter(input => !!input)
+            ).subscribe(input => {
+                this.dialog = createComponent(input.component?.type || DialogComponent, { environmentInjector })
+                
+                Object.entries(input).forEach(([k, v]) => this.dialog.setInput(k, v))
+                
+                if(input.component?.input)
+                    Object.entries(input.component.input).forEach(([k, v]) => this.dialog.setInput(k, v))
+    
+                this.container.insert(this.dialog.hostView)
             }),
-            filter(input => !!input)
-        ).subscribe(input => {
-            this.dialog = createComponent(input.component?.type || DialogComponent, { environmentInjector })
-            
-            Object.entries(input).forEach(([k, v]) => this.dialog.setInput(k, v))
-            
-            if(input.component?.input)
-                Object.entries(input.component.input).forEach(([k, v]) => this.dialog.setInput(k, v))
-
-            container.insert(this.dialog.hostView)
-        })
-        
-        ns.getNotification$().pipe(
-            distinctUntilChanged((a, b) => isDeepEqual(a, b)),
-            tap(() => {
-                if(this.notification)
-                    this.notification.destroy()
+            ns.getNotification$().pipe(
+                distinctUntilChanged((a, b) => isDeepEqual(a, b)),
+                tap(() => {
+                    if(this.notification)
+                        this.notification.destroy()
+                }),
+                filter(input => !!input)
+            ).subscribe(input => {
+                this.notification = createComponent(NotificationComponent, { environmentInjector })
+                
+                Object.entries(input).forEach(([k, v]) => this.notification.setInput(k, v))
+    
+                this.container.insert(this.notification.hostView)
             }),
-            filter(input => !!input)
-        ).subscribe(input => {
-            this.notification = createComponent(NotificationComponent, { environmentInjector })
-            
-            Object.entries(input).forEach(([k, v]) => this.notification.setInput(k, v))
-
-            container.insert(this.notification.hostView)
-        })
-
-        ts.getTooltip$().pipe(
-            tap(() => {
-                if(this.tooltip)
-                    this.tooltip.destroy()
-            }),
-            filter(input => !!input)
-        ).subscribe(input => {
-            this.tooltip = createComponent(TooltipComponent, {
-                environmentInjector,
-                elementInjector: Injector.create({
-                    providers: [{ provide: TOOLTIP_DESTROY_TOKEN, useValue: () => this.tooltip.destroy() }]
+            ts.getTooltip$().pipe(
+                tap(() => {
+                    if(this.tooltip)
+                        this.tooltip.destroy()
+                }),
+                filter(input => !!input)
+            ).subscribe(input => {
+                this.tooltip = createComponent(TooltipComponent, {
+                    environmentInjector,
+                    elementInjector: Injector.create({
+                        providers: [{ provide: TOOLTIP_DESTROY_TOKEN, useValue: () => this.tooltip.destroy() }]
+                    })
                 })
-            })
-
-            Object.entries(input).forEach(([k, v]) => this.tooltip.setInput(k, v))
-
-            container.insert(this.tooltip.hostView)
-        })
-
-        cs.getContextMenu$().pipe(
-            distinctUntilChanged((a, b) => isDeepEqual(a, b)),
-            tap(() => {
-                if(this.contextMenu)
-                    this.contextMenu.destroy()
+    
+                Object.entries(input).forEach(([k, v]) => this.tooltip.setInput(k, v))
+    
+                this.container.insert(this.tooltip.hostView)
             }),
-            filter(input => !!input)
-        ).subscribe(input => {
-            this.contextMenu = createComponent(ContextMenuComponent, {
-                environmentInjector,
-                elementInjector: Injector.create({
-                    providers: [{ provide: CONTEXT_MENU_DESTROY_TOKEN, useValue: () => this.contextMenu.destroy() }]
+            cs.getContextMenu$().pipe(
+                distinctUntilChanged((a, b) => isDeepEqual(a, b)),
+                tap(() => {
+                    if(this.contextMenu)
+                        this.contextMenu.destroy()
+                }),
+                filter(input => !!input)
+            ).subscribe(input => {
+                this.contextMenu = createComponent(ContextMenuComponent, {
+                    environmentInjector,
+                    elementInjector: Injector.create({
+                        providers: [{ provide: CONTEXT_MENU_DESTROY_TOKEN, useValue: () => this.contextMenu.destroy() }]
+                    })
                 })
+    
+                Object.entries(input).forEach(([k, v]) => this.contextMenu.setInput(k, v))
+    
+                this.container.insert(this.contextMenu.hostView)
             })
-
-            Object.entries(input).forEach(([k, v]) => this.contextMenu.setInput(k, v))
-
-            container.insert(this.contextMenu.hostView)
-        })
+        ]
     }
 }
