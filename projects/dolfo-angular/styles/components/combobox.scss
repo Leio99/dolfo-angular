@@ -1,0 +1,73 @@
+.combobox{
+    @include base-input;
+    @include pointer;
+    @include relative;
+    z-index: 1;
+
+    &.autocomplete{
+        padding: 0
+    }
+
+    .combobox-label{
+        @include flex;
+        @include align-center;
+        @include relative;
+        color: $placeholder;
+
+        input{
+            border: 0;
+            box-shadow: unset !important;
+            background-color: transparent
+        }
+
+        > span{
+            @include block;
+            @include ellipsis-text;
+            width: 100%
+        }
+    }
+
+    &.opened{
+        border-color: $primary;
+        background-color: rgba(0, 0, 0, 0.04);
+        box-shadow: 0 2px 2px $primaryFocusShadow;
+        z-index: 2
+    }
+
+    .combobox-options{
+        @include absolute;
+        @include rounded;
+        background-color: $white;
+        border: 1px solid $primary;
+        box-shadow: 0 3px 5px rgba(0, 0, 0, 0.2);
+        top: calc(100% + 5px);
+        max-height: 300px;
+        overflow: auto;
+        left: 1rem;
+        right: 1rem;
+
+        &:not(.opened){
+            @include hidden
+        }
+
+        .combobox-option, .loading, .no-results{
+            @include flex;
+            @include align-center;
+            gap: 10px;
+            padding: 10px;
+
+            &.loading, &.no-results{
+                @include justify-center
+            }
+
+            &.combobox-option:not(.selected):hover{
+                background-color: $secondary
+            }
+
+            &.selected{
+                background-color: $primary;
+                color: $white
+            }
+        }
+    }
+}

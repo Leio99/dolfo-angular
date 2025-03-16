@@ -3,6 +3,7 @@
  */
 
 // Form
+export * from "./lib/components/form/autocomplete.component"
 export * from "./lib/components/form/base-form-input"
 export * from "./lib/components/form/combobox.component"
 export * from "./lib/components/form/datepicker.component"
@@ -44,3 +45,4 @@ export * from "./lib/shared/services"
 
 // Pipes
 export * from "./lib/shared/pipes/translate.pipe"
+
