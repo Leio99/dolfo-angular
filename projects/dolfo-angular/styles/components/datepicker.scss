@@ -1,4 +1,4 @@
-.input-container input[type="date"]{
+.input-container input[type="date"], .input-container input[type="datetime-local"]{
     @include base-input;
     @include rounded;
     @include pointer;
