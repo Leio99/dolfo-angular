@@ -2,6 +2,7 @@
     @include base-input;
     @include pointer;
     @include relative;
+    @include no-outline;
     z-index: 1;
 
     &.autocomplete{
@@ -60,11 +61,13 @@
                 @include justify-center
             }
 
-            &.combobox-option:not(.selected):hover{
-                background-color: $secondary
+            &.combobox-option{
+                &:not(.selected):hover, &.focused{
+                    background-color: $secondary
+                }
             }
 
-            &.selected{
+            &.selected:not(.focused){
                 background-color: $primary;
                 color: $white
             }

@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, forwardRef, Input, signal, ViewChild } from "@angular/core"
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { delay, filter, fromEvent, map, mergeMap, Observable, tap } from "rxjs"
 import { ComboOption } from "../../shared/interfaces"
+import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
 
 @Component({
@@ -9,7 +10,7 @@ import { BaseFormInput } from "./base-form-input"
     template: `<dolfo-input-container>
         <div class="combobox autocomplete" [class.opened]="opened()" #autocomplete>
             <div class="combobox-label">
-                <input type="text" [value]="currentOption()" #autocompleteInput />
+                <input #autocompleteInput type="text" [value]="currentOption()" (focus)="onFocus.emit($event); opened.set(true)" (blur)="onBlur.emit($event)" />
             </div>
 
             <div class="combobox-options" [class.opened]="opened()">
@@ -24,8 +25,8 @@ import { BaseFormInput } from "./base-form-input"
                     </div>
                 }
 
-                @for(opt of options(); track opt.value){
-                    <div class="combobox-option" [class.selected]="isSelected(opt)" (click)="$event.stopPropagation(); setOption(opt)">
+                @for(opt of options(); track opt.value; let idx = $index){
+                    <div class="combobox-option" [class.selected]="isSelected(opt)" [class.focused]="currentFocus() === idx" (click)="$event.stopPropagation(); setOption(opt)">
                         <span>{{ opt.label }}</span>
                     </div>
                 }
@@ -40,16 +41,19 @@ import { BaseFormInput } from "./base-form-input"
         { provide: BaseFormInput, useExisting: AutocompleteComponent }
     ]
 })
-export class AutocompleteComponent extends BaseFormInput<any> implements AfterViewInit{
+export class AutocompleteComponent extends BaseFormInput<any> implements AfterViewInit, OnFocus, OnBlur{
     @ViewChild("autocomplete") autocomplete: ElementRef<HTMLDivElement>
     @ViewChild("autocompleteInput") autocompleteInput: ElementRef<HTMLInputElement>
     @Input({ required: true }) search$: (filter: string) => Observable<ComboOption[]>
     @Input() minChars = 3
+    @Output() onFocus = new EventEmitter<FocusEvent>()
+    @Output() onBlur = new EventEmitter<FocusEvent>()
 
     public options = signal<ComboOption[]>([])
     public opened = signal(false)
     public currentOption = signal("")
     public loading = signal(false)
+    public currentFocus = signal<number>(null)
     private keyDown = false
     private keyDownTimeout: NodeJS.Timeout
 
@@ -60,9 +64,10 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
             map(ev => ev.target as HTMLElement),
             map(target => !this.autocomplete.nativeElement.contains(target) && !target.isEqualNode(this.autocomplete.nativeElement))
         ).subscribe(condition => {
-            if(condition && this.opened())
+            if(condition && this.opened()){
+                this.currentFocus.set(null)
                 this.opened.set(false)
-            else if(!this.opened() && !condition)
+            }else if(!this.opened() && !condition)
                 this.opened.set(true)
         }))
     }
@@ -90,12 +95,29 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         ).subscribe(results => {
             this.loading.set(false)
             this.options.set(results)
+            this.currentFocus.set(null)
         }))
 
-        this.addSubscription(fromEvent(this.autocompleteInput.nativeElement, "keydown").subscribe(() => {
-            this.keyDown = true
-            clearTimeout(this.keyDownTimeout)
-            this.keyDownTimeout = setTimeout(() => this.keyDown = false, 1000)
+        this.addSubscription(fromEvent<KeyboardEvent>(this.autocompleteInput.nativeElement, "keydown").subscribe(e => {
+            if(e.key.length === 1){
+                this.keyDown = true
+                clearTimeout(this.keyDownTimeout)
+                this.keyDownTimeout = setTimeout(() => this.keyDown = false, 1000)
+            }else if(this.opened()){
+                if(e.key === "ArrowDown"){
+                    e.preventDefault()
+                    this.currentFocus.update(v => v === this.options().length - 1 ? 0 : v === null ? 0 : v + 1)
+                }else if(e.key === "ArrowUp"){
+                    e.preventDefault()
+                    this.currentFocus.update(v => v === 0 ? this.options().length - 1 : v === null ? 0 : v - 1)
+                }else if(e.key === "Enter" && this.currentFocus() >= 0 && this.currentFocus() != null){
+                    e.preventDefault()
+                    this.setOption(this.options()[this.currentFocus()])
+                }else if(e.key === "Tab"){
+                    this.currentFocus.set(null)
+                    this.opened.set(false)
+                }
+            }
         }))
     }
 

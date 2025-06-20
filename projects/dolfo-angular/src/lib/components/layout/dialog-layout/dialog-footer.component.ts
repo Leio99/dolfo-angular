@@ -1,5 +1,6 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from "@angular/core"
 import { DialogFooterButton } from "../../../shared/interfaces"
+import { ButtonComponent } from "../button.component"
 
 @Component({
     selector: "dolfo-dialog-footer",
@@ -16,13 +17,28 @@ import { DialogFooterButton } from "../../../shared/interfaces"
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: false
 })
-export class DialogFooterComponent implements OnInit{
+export class DialogFooterComponent implements OnInit, AfterViewChecked{
     @ViewChild(TemplateRef) template: TemplateRef<unknown>
+    @ViewChildren(ButtonComponent) childrenButtons: QueryList<ButtonComponent>
     @Input({ required: true }) buttons: DialogFooterButton[]
+
+    private focused = false
 
     constructor(private cdr: ChangeDetectorRef) {}
 
     ngOnInit() {
         this.cdr.detectChanges()
+        setTimeout(() => this.cdr.markForCheck())
+    }
+
+    ngAfterViewChecked(): void {
+        if(!this.focused){
+            const firstBtn = this.childrenButtons.find(btn => !btn.disabled && !btn.loading)
+
+            if(firstBtn){
+                firstBtn.focus()
+                this.focused = true
+            }
+        }
     }
 }

@@ -1,4 +1,4 @@
-export const isDeepEqual = (objA, objB, map = new WeakMap()) => {
+export const isDeepEqual = (objA: any, objB: any, map = new WeakMap()) => {
     if (Object.is(objA, objB))
         return true
 

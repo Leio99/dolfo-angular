@@ -1,20 +1,21 @@
-import { ChangeDetectionStrategy, Component, ElementRef, forwardRef, Input, signal, ViewChild } from "@angular/core"
+import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { fromEvent, map } from "rxjs"
 import { ComboInput, ComboOption } from "../../shared/interfaces"
+import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
 
 @Component({
     selector: "dolfo-combobox",
     template: `<dolfo-input-container>
-		<div class="combobox" [class.opened]="opened()" #combo>
+		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="opened.set(true); onFocus.emit($event)" (blur)="onBlur.emit($event)">
 			<div class="combobox-label">
 				<span>{{ extractLabel() | translate }}</span>
 			</div>
 
 			<div class="combobox-options" [class.opened]="opened()">
-				@for(opt of options; track opt.value){
-					<div class="combobox-option" [class.selected]="isSelected(opt)" (click)="$event.stopPropagation(); setOption(opt)">
+				@for(opt of options; track opt.value; let idx = $index){
+					<div class="combobox-option" [class.selected]="isSelected(opt)" [class.focused]="currentFocus() === idx" (click)="$event.stopPropagation(); setOption(opt)">
 						<span>{{ opt.label }}</span>
 					</div>
 				}
@@ -29,15 +30,18 @@ import { BaseFormInput } from "./base-form-input"
     ],
     standalone: false
 })
-export class ComboboxComponent extends BaseFormInput<number | number[]> implements Required<ComboInput>{
+export class ComboboxComponent extends BaseFormInput<number | number[]> implements Required<ComboInput>, OnBlur, OnFocus{
+	@ViewChild("combo") combo: ElementRef<HTMLDivElement>
 	@Input({ required: true }) options: ComboOption[]
 	@Input({ required: true }) placeHolder: string
-	@Input() multiple = false
-	@ViewChild("combo") combo: ElementRef<HTMLDivElement>
+	@Input({ transform: booleanAttribute }) multiple = false
+	@Output() onFocus = new EventEmitter<FocusEvent>()
+	@Output() onBlur = new EventEmitter<FocusEvent>()
 
 	public opened = signal(false)
+    public currentFocus = signal<number>(null)
 
-	constructor(){
+	constructor(private cdr: ChangeDetectorRef){
 		super()
 
 		this.addSubscription(fromEvent(window, "click").pipe(
@@ -49,6 +53,31 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 			else if(!this.opened() && !condition)
 				this.opened.set(true)
 		}))
+	}
+
+	override ngAfterViewInit() {
+		this.addSubscription(fromEvent<KeyboardEvent>(this.combo.nativeElement, "keydown").subscribe(e => {
+            if(this.opened()){
+                if(e.key === "ArrowDown"){
+                    e.preventDefault()
+                    this.currentFocus.update(v => v === this.options.length - 1 ? 0 : v === null ? 0 : v + 1)
+                }else if(e.key === "ArrowUp"){
+                    e.preventDefault()
+                    this.currentFocus.update(v => v === 0 ? this.options.length - 1 : v === null ? 0 : v - 1)
+                }else if(e.key === "Enter" && this.currentFocus() >= 0 && this.currentFocus() != null){
+                    e.preventDefault()
+                    this.setOption(this.options[this.currentFocus()])
+
+					if(!this.multiple)
+						this.opened.set(false)
+
+					this.cdr.detectChanges()
+                }else if(e.key === "Tab"){
+                    this.currentFocus.set(null)
+                    this.opened.set(false)
+                }
+            }
+        }))
 	}
 
 	public extractLabel = () => {
