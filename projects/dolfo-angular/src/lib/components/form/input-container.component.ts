@@ -45,7 +45,7 @@ export class InputContainerComponent{
                 if(val.password)
                     return ["form.invalidPassword"]
 
-                return ["form.errorGeneric"]
+                return ["form.error." + Object.keys(val)[0]]
             }
     
             return null
