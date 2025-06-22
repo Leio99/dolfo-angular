@@ -5,9 +5,22 @@ button{
     @include justify-center;
     @include pseudo-btn('color-');
     gap: 7px;
-    padding: 0.3rem 0.7rem;
     border-radius: 3px;
     border: 0;
+
+    &:not(.size-sm):not(.size-lg){
+        padding: 0.3rem 0.7rem
+    }
+
+    &.size-sm{
+        font-size: small;
+        padding: 0.3rem 0.5rem
+    }
+
+    &.size-lg{
+        font-size: large;
+        padding: 0.3rem 1rem
+    }
 
     &[disabled]{
         opacity: 0.7

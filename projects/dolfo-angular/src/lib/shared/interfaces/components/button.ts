@@ -1,1 +1,2 @@
 export type ButtonColor = "primary" | "secondary" | "white" | "error" | "warning" | "success" | "info"
+export type ButtonSize = "small" | "large"
