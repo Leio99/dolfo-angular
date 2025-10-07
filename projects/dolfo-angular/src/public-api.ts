@@ -10,6 +10,7 @@ export * from "./lib/components/form/datepicker.component"
 export * from "./lib/components/form/form.module"
 export * from "./lib/components/form/input-container.component"
 export * from "./lib/components/form/input-text.component"
+export * from "./lib/components/form/input-time.component"
 
 // Layout
 export * from "./lib/components/layout/button.component"

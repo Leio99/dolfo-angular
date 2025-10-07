@@ -37,7 +37,7 @@
         color: $error
     }
 
-    input[type="text"], input[type="password"], input[type="email"], textarea{
+    input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"]{
         @include base-input;
 
         &:focus{
