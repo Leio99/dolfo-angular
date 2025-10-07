@@ -35,10 +35,10 @@ export class DialogFooterComponent implements OnInit, AfterViewChecked{
         if(!this.focused){
             const firstBtn = this.childrenButtons.find(btn => !btn.disabled && !btn.loading)
 
-            if(firstBtn){
+            if(firstBtn)
                 firstBtn.focus()
-                this.focused = true
-            }
+            
+            this.focused = true
         }
     }
 }
