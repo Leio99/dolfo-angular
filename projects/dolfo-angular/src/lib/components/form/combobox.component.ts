@@ -20,6 +20,8 @@ import { BaseFormInput } from "./base-form-input"
 					</div>
 				}
 			</div>
+
+            <input type="hidden" [formControl]="input" />
 		</div>
 	</dolfo-input-container>`,
     changeDetection: ChangeDetectionStrategy.OnPush,
@@ -100,6 +102,8 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 				this.input.setValue(null)
 			else
 				this.input.setValue(opt.value)
+
+            this.opened.set(false)
 		}else{
 			const castValue = value as number[]
 

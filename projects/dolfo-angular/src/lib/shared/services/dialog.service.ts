@@ -7,21 +7,26 @@ import { TranslateService } from "./translate.service"
     providedIn: "root"
 })
 export class DialogService{
-    private dialog$ = new BehaviorSubject<IDialogInput>(null)
-    private waiter$: BehaviorSubject<DialogOutput>
+    private dialog$ = new BehaviorSubject<(IDialogInput & { _dialogId: number })[]>([])
+    private waiters: BehaviorSubject<DialogOutput>[] = []
 
     constructor(private ts: TranslateService){}
+
+    private getLastWaiter = () => this.waiters[this.waiters.length - 1]
 
     public getDialog = () => this.dialog$.getValue()
 
     public getDialog$ = () => this.dialog$.asObservable()
 
     public openDialog = (input: IDialogInput) => {
-        this.waiter$?.complete()
-        this.waiter$ = new BehaviorSubject<DialogOutput>(null)
-        this.dialog$.next(input)
+        const newWaiter$ = new BehaviorSubject<DialogOutput>(null)
+        this.waiters.push(newWaiter$)
+        this.dialog$.next(this.dialog$.getValue().concat({
+            ...input,
+            _dialogId: new Date().getTime()
+        }))
 
-        return this.waiter$.pipe(
+        return this.getLastWaiter().pipe(
             filter(d => d != null)
         )
     }
@@ -37,9 +42,11 @@ export class DialogService{
     })
 
     public close = () => {
-        this.dialog$.next(null)
-        this.waiter$?.complete()
+        const v = this.dialog$.getValue()
+        this.dialog$.next(v.slice(0, v.length - 1))
+        this.getLastWaiter()?.complete()
+        this.waiters = this.waiters.slice(0, this.waiters.length - 1)
     }
 
-    public action = (action: DialogOutput) => this.waiter$.next(action)
+    public action = (action: DialogOutput) => this.getLastWaiter().next(action)
 }

@@ -13,8 +13,8 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
     public loading$ = new BehaviorSubject(false)
     protected notificationService = inject(NotificationService)
     protected translateService = inject(TranslateService)
+    protected subscribed = false
     private cdr = inject(ChangeDetectorRef)
-    private subscribed = false
     
     protected abstract submit: (_formValue: T) => Observable<unknown>
 
