@@ -113,6 +113,7 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 				this.input.setValue(castValue.concat(opt.value))
 		}
 
+        console.warn("emetto", this.input.value)
 		this.onChange.emit(this.input.value)
 	}
 
