@@ -14,6 +14,7 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
     protected notificationService = inject(NotificationService)
     protected translateService = inject(TranslateService)
     private cdr = inject(ChangeDetectorRef)
+    private subscribed = false
     
     protected abstract submit: (_formValue: T) => Observable<unknown>
 
@@ -21,6 +22,8 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
         if(!this.formRef)
             return
         
+        this.subscribed = true
+
         this.addSubscription(this.loading$.pipe(
             distinctUntilChanged()
         ).subscribe(loading => {
@@ -63,5 +66,10 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
         this.addSubscription(this.translateService.getLang$().subscribe(() => this.cdr.detectChanges()))
     }
 
-    protected manualSubmit = () => this.formRef.ngSubmit.emit()
+    protected manualSubmit = () => {
+        if(!this.subscribed)
+            this.ngAfterViewInit()
+        
+        this.formRef.ngSubmit.emit()
+    }
 }
