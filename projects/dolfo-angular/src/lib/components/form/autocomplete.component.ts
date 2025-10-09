@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
-import { delay, filter, fromEvent, map, mergeMap, Observable, tap } from "rxjs"
-import { ComboOption } from "../../shared/interfaces"
+import { delay, filter, fromEvent, map, mergeMap, tap } from "rxjs"
+import { ComboboxConfig, ComboOption } from "../../shared/interfaces"
 import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
 
@@ -44,7 +44,7 @@ import { BaseFormInput } from "./base-form-input"
 export class AutocompleteComponent extends BaseFormInput<any> implements AfterViewInit, OnFocus, OnBlur{
     @ViewChild("autocomplete") autocomplete: ElementRef<HTMLDivElement>
     @ViewChild("autocompleteInput") autocompleteInput: ElementRef<HTMLInputElement>
-    @Input({ required: true }) search$: (filter: string) => Observable<ComboOption[]>
+    @Input({ required: true }) config: ComboboxConfig<any>
     @Input() minChars = 3
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
@@ -52,6 +52,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
     public options = signal<ComboOption[]>([])
     public opened = signal(false)
     public currentOption = signal("")
+    public currentOptionLabel = signal("")
     public loading = signal(false)
     public currentFocus = signal<number>(null)
     private keyDown = false
@@ -61,6 +62,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         super()
 
         this.addSubscription(fromEvent(window, "click").pipe(
+            filter(() => !!this.autocomplete),
             map(ev => ev.target as HTMLElement),
             map(target => !this.autocomplete.nativeElement.contains(target) && !target.isEqualNode(this.autocomplete.nativeElement))
         ).subscribe(condition => {
@@ -70,6 +72,10 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
             }else if(!this.opened() && !condition)
                 this.opened.set(true)
         }))
+
+        this.addSubscription(this.input.valueChanges.pipe(
+            filter(v => v != null && (this.autocompleteInput.nativeElement.value !== this.currentOptionLabel() || !this.currentOptionLabel()))
+        ).subscribe(value => this.setOption({ value, label: this.config.getLabel(value) }, true)))
     }
 
     override ngAfterViewInit() {
@@ -91,7 +97,11 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
                 this.opened.set(true)
                 this.loading.set(true)
             }),
-            mergeMap(value => this.search$(value))
+            mergeMap(value => this.config.search$(value)),
+            map(results => results.map(value => ({
+                value,
+                label: this.config.getLabel(value)
+            })))
         ).subscribe(results => {
             this.loading.set(false)
             this.options.set(results)
@@ -123,10 +133,13 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
 
 	public isSelected = (opt: ComboOption) => this.input.value === opt.value
 
-    public setOption = (opt: ComboOption) => {
+    public setOption = (opt: ComboOption, noEmit = false) => {
         this.autocompleteInput.nativeElement.value = opt?.label
+        this.currentOptionLabel.set(opt?.label)
         this.input.setValue(opt?.value)
         this.opened.set(false)
-		this.onChange.emit(this.input.value)
+
+        if(!noEmit)
+		    this.onChange.emit(this.input.value)
     }
 }
