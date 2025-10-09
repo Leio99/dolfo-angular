@@ -11,7 +11,7 @@
         @let columns = config.getColumns();
         @let showActions = config.hasActions;
         @let selection = config.getSelectionConfig();
-        @let colSpan = columns.length + (showActions ? 1 : 0);
+        @let colSpan = columns.length + (showActions ? 1 : 0) + (selection ? 1 : 0);
     
         <thead>
             <tr>
