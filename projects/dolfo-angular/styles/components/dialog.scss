@@ -60,7 +60,7 @@
             white-space: pre-line;
             overflow: auto;
 
-            .loading{
+            .loading:not(.grid-container){
                 text-align: center
             }
         }
