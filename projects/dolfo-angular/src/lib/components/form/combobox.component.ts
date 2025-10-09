@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
+import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { fromEvent, map } from "rxjs"
 import { ComboInput, ComboOption } from "../../shared/interfaces"
@@ -32,10 +32,10 @@ import { BaseFormInput } from "./base-form-input"
     ],
     standalone: false
 })
-export class ComboboxComponent extends BaseFormInput<number | number[]> implements Required<ComboInput>, OnBlur, OnFocus{
+export class ComboboxComponent extends BaseFormInput<number | number[]> implements AfterViewInit, Required<ComboInput>, OnBlur, OnFocus{
 	@ViewChild("combo") combo: ElementRef<HTMLDivElement>
 	@Input({ required: true }) options: ComboOption[]
-	@Input({ required: true }) placeHolder: string
+	@Input() placeHolder: string
 	@Input({ transform: booleanAttribute }) multiple = false
 	@Output() onFocus = new EventEmitter<FocusEvent>()
 	@Output() onBlur = new EventEmitter<FocusEvent>()
@@ -58,6 +58,8 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 	}
 
 	override ngAfterViewInit() {
+		super.ngAfterViewInit()
+
 		this.addSubscription(fromEvent<KeyboardEvent>(this.combo.nativeElement, "keydown").subscribe(e => {
             if(this.opened()){
                 if(e.key === "ArrowDown"){
@@ -86,7 +88,7 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 		const { value } = this.input
 
 		if(value == null || (value as number[])?.length === 0)
-			return this.placeHolder
+			return this.placeHolder || " "
 
 		if(!this.multiple)
 			return this.options.find(opt => opt.value === value).label
@@ -113,7 +115,6 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 				this.input.setValue(castValue.concat(opt.value))
 		}
 
-        console.warn("emetto", this.input.value)
 		this.onChange.emit(this.input.value)
 	}
 
