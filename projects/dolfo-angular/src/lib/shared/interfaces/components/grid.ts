@@ -36,6 +36,7 @@ export interface IGridConfig<T>{
     }
     readonly events?: {
         onRowClick?: (item: T) => void
+        onSelectionChange?: (item: T[]) => void
     }
     readonly getItemKey: (item: T) => string | number
     readonly actions?: (item: T) => ContextMenuItem[]
@@ -95,6 +96,8 @@ export class GridConfig<T>{
             this.selectedItems = [item]
         else
             this.selectedItems.push(item)
+
+        this.emitSelectionChange()
     }
 
     public isItemSelected = (item: T) => this.selectedItems.some(d => this.getUniqueId(d) === this.getUniqueId(item))
@@ -104,9 +107,13 @@ export class GridConfig<T>{
             this.selectedItems = []
         else
             this.selectedItems = this.items$.getValue()
+
+        this.emitSelectionChange()
     }
 
     public getSelectionConfig = () => this.config.selection
+
+    private emitSelectionChange = () => this.config.events?.onSelectionChange?.(this.getSelectedItems())
 
     public isAllSelected = () => this.selectedItems.length === this.items$.getValue().length
 

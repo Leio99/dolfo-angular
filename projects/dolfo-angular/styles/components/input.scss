@@ -56,3 +56,28 @@
         min-height: 100px
     }
 }
+
+input[type="checkbox"]{
+    @include rounded;
+    @include inline-flex;
+    @include align-center;
+    @include justify-center;
+    @include pointer;
+    appearance: none;
+    -webkit-appearance: none;
+    border: 1px solid #ccc;
+    background-color: $white;
+    width: 20px;
+    height: 20px;
+    color: $white;
+
+    &:before{
+        font-family: "icomoon";
+        content: "\ea10";
+        font-size: 9px
+    }
+
+    &:checked{
+        background-color: $primary
+    }
+}
