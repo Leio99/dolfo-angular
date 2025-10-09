@@ -10,10 +10,19 @@
     <table>
         @let columns = config.getColumns();
         @let showActions = config.hasActions;
+        @let selection = config.getSelectionConfig();
         @let colSpan = columns.length + (showActions ? 1 : 0);
     
         <thead>
             <tr>
+                @if(selection){
+                    <th>
+                        @if(selection.showSelectAll && selection.type === "multiple"){
+                            <input type="checkbox" [checked]="config.isAllSelected()" (change)="config.toggleSelectAll()" />
+                        }
+                    </th>
+                }
+
                 @for(col of columns; track col.label){
                     <th [ngStyle]="{ width: col.width + 'px', maxWidth: col.width + 'px' }">{{ col.label | translate }}</th>
                 }
@@ -33,6 +42,12 @@
                     @let rowClass = config.getRowClass(item);
     
                     <tr (click)="config.getEvents()?.onRowClick(item)" [dolfoContextMenu]="itemActions" position="bottom-right">
+                        @if(selection){
+                            <td [ngClass]="rowClass" class="align-center">
+                                <input type="checkbox" [checked]="config.isItemSelected(item)" (change)="config.toggleSelection(item)" />
+                            </td>
+                        }
+
                         @for(col of columns; track col.label){
     
                             <td [ngStyle]="{ width: col.width + 'px' }" [ngClass]="rowClass" [class.align-right]="col.align === 'right'" [class.align-center]="col.align === 'center'">

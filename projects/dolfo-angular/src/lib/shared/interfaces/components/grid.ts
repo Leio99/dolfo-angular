@@ -30,23 +30,30 @@ export interface GridColumn{
 export interface IGridConfig<T>{
     readonly items: T[] | Observable<T[]>
     readonly columns: GridColumn[]
-    readonly getItemKey: (item: T) => string | number
-    readonly actions?: (item: T) => ContextMenuItem[]
-    readonly rowClass?: (item: T) => string
+    readonly selection?: {
+        readonly type?: "single" | "multiple"
+        readonly showSelectAll?: boolean
+    }
     readonly events?: {
         onRowClick?: (item: T) => void
     }
+    readonly getItemKey: (item: T) => string | number
+    readonly actions?: (item: T) => ContextMenuItem[]
+    readonly rowClass?: (item: T) => string
 }
 
 export class GridConfig<T>{
     private items$ = new BehaviorSubject<T[]>([])
     private loading$ = new BehaviorSubject(false)
+    private selectedItems: T[]
 
     constructor(private config: IGridConfig<T>){
         this.refreshGrid()
     }
 
     public refreshGrid = () => {
+        this.selectedItems = []
+
         if(Array.isArray(this.config.items))
             this.items$.next(this.config.items)
         else{
@@ -78,6 +85,30 @@ export class GridConfig<T>{
     public isLoading$ = () => this.loading$.asObservable()
 
     public toggleLoading = () => this.loading$.next(!this.loading$.getValue())
+
+    public getSelectedItems = () => this.items$.getValue().filter(it => this.selectedItems.some(d => this.getUniqueId(d) === this.getUniqueId(it)))
+
+    public toggleSelection = (item: T) => {
+        if(this.isItemSelected(item))
+            this.selectedItems = this.selectedItems.filter(it => this.getUniqueId(it) !== this.getUniqueId(item))
+        else if(this.config.selection?.type === "single")
+            this.selectedItems = [item]
+        else
+            this.selectedItems.push(item)
+    }
+
+    public isItemSelected = (item: T) => this.selectedItems.some(d => this.getUniqueId(d) === this.getUniqueId(item))
+
+    public toggleSelectAll = () => {
+        if(this.isAllSelected())
+            this.selectedItems = []
+        else
+            this.selectedItems = this.items$.getValue()
+    }
+
+    public getSelectionConfig = () => this.config.selection
+
+    public isAllSelected = () => this.selectedItems.length === this.items$.getValue().length
 
     public get hasActions(){
         return !!this.config.actions
