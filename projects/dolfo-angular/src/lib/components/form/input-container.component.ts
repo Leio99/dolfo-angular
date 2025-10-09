@@ -1,7 +1,9 @@
+import { DecimalPipe } from "@angular/common"
 import { Component, ElementRef } from "@angular/core"
 import { ValidationErrors } from "@angular/forms"
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from "rxjs"
 import { isDeepEqual } from "../../shared/interfaces"
+import { TranslateService } from "../../shared/services"
 import { BaseFormInput } from "./base-form-input"
 
 @Component({
@@ -26,6 +28,7 @@ import { BaseFormInput } from "./base-form-input"
             </div>
         }
     </div>`,
+    providers: [DecimalPipe],
     standalone: false
 })
 export class InputContainerComponent{
@@ -44,6 +47,8 @@ export class InputContainerComponent{
                     return [`form.minChars`, { length: val.minlength.requiredLength }]
                 if(val.password)
                     return ["form.invalidPassword"]
+                if(val.max)
+                    return ["form.maxValue", { value: this.cp.transform(val.max.max, null, this.translateService.getLang().name) }]
 
                 return ["form.error." + Object.keys(val)[0]]
             }
@@ -52,7 +57,7 @@ export class InputContainerComponent{
         })
     )
 
-    constructor(public input: BaseFormInput<unknown>, private elRef: ElementRef<HTMLDivElement>){}
+    constructor(public input: BaseFormInput<unknown>, private elRef: ElementRef<HTMLDivElement>, private translateService: TranslateService, private cp: DecimalPipe){}
 
     public focus = () => {
         const input = this.elRef.nativeElement.querySelector("input")

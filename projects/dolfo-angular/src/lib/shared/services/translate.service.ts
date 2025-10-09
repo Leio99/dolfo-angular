@@ -50,7 +50,7 @@ export class TranslateService {
         return this.load$(foundLang)
     }
 
-    private load$ = ({ name }: ILanguage) => this.httpClient.get<Record<string, string>>(`assets/langs/${name}.json`).pipe(
+    private load$ = ({ name, altFileName }: ILanguage) => this.httpClient.get<Record<string, string>>(`assets/langs/${altFileName || name}.json`).pipe(
         tap(content => this.langContent = content)
     )
 

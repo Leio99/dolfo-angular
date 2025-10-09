@@ -3,6 +3,7 @@ import { InjectionToken, ValueProvider } from "@angular/core"
 export interface ILanguage{
     readonly name: string
     readonly locale: string
+    readonly altFileName?: string
 }
 
 export interface ILanguageToken{
