@@ -49,7 +49,6 @@
                         }
 
                         @for(col of columns; track col.label){
-    
                             <td [ngStyle]="{ width: col.width + 'px' }" [ngClass]="rowClass" [class.align-right]="col.align === 'right'" [class.align-center]="col.align === 'center'">
                                 {{ resolveField(item, col) }}
                             </td>
