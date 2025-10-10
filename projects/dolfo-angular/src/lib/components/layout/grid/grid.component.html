@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 @if(selection){
-                    <th>
+                    <th [style]="{ width: 0 }">
                         @if(selection.showSelectAll && selection.type === "multiple"){
                             <input type="checkbox" [checked]="config.isAllSelected()" (change)="config.toggleSelectAll()" />
                         }
