@@ -1,10 +1,11 @@
 import { ElementRef } from "@angular/core"
+import { IconName } from "./icon"
 
 export interface ContextMenuItem{
     readonly label: string
     readonly onClick: () => void
     readonly disabled?: boolean
-    readonly icon?: string
+    readonly icon?: IconName
     readonly className?: string
 }
 

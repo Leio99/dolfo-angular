@@ -15,7 +15,7 @@ export const CONTEXT_MENU_DESTROY_TOKEN = new InjectionToken<() => void>("CONTEX
         @for(item of items; track item.label){
             <div [ngClass]="item.className" [class.disabled]="item.disabled" (click)="clickItem(item)">
                 @if(item.icon){
-                    <i [class]="'icon-' + item.icon"></i>
+                    <dolfo-icon [name]="item.icon"></dolfo-icon>
                 }
                 {{ item.label }}
             </div>
