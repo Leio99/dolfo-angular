@@ -1,6 +1,6 @@
 import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
-import { fromEvent, map } from "rxjs"
+import { filter, fromEvent, map } from "rxjs"
 import { ComboInput, ComboOption } from "../../shared/interfaces"
 import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
@@ -47,6 +47,7 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 		super()
 
 		this.addSubscription(fromEvent(window, "click").pipe(
+            filter(() => !!this.combo),
 			map(ev => ev.target as HTMLElement),
 			map(target => !this.combo.nativeElement.contains(target) && !target.isEqualNode(this.combo.nativeElement))
 		).subscribe(condition => {
