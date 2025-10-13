@@ -25,8 +25,8 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
         const initialValue = this.control.value
 
         this.addSubscription(this.input.valueChanges.pipe(
-            filter(v => !this.control.touched && !isDeepEqual(initialValue, v))
-        ).subscribe(v => this.control.markAsTouched()))
+            filter(v => !this.control.touched && !isDeepEqual(initialValue, v) && this.input.dirty)
+        ).subscribe(() => this.control.markAsTouched()))
 
         this.addSubscription(this.control.statusChanges.pipe(
             filter(s => (s === "VALID" || s === "INVALID") && this.control.touched)
