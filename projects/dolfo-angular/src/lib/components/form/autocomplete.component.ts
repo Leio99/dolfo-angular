@@ -76,6 +76,10 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         this.addSubscription(this.input.valueChanges.pipe(
             filter(v => v != null && !!this.autocompleteInput && (this.autocompleteInput.nativeElement.value !== this.currentOptionLabel() || !this.currentOptionLabel()))
         ).subscribe(value => this.setOption({ value, label: this.config.getLabel(value) }, true)))
+
+        this.addSubscription(this.input.valueChanges.pipe(
+            filter(v => v == null && !!this.autocompleteInput && this.autocompleteInput.nativeElement.value != null && this.autocompleteInput.nativeElement.value !== "")
+        ).subscribe(() => this.setOption(null, true)))
     }
 
     override ngAfterViewInit() {
@@ -134,7 +138,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
 	public isSelected = (opt: ComboOption) => this.input.value === opt.value
 
     public setOption = (opt: ComboOption, noEmit = false) => {
-        this.autocompleteInput.nativeElement.value = opt?.label
+        this.autocompleteInput.nativeElement.value = opt?.label ?? ""
         this.currentOptionLabel.set(opt?.label)
         this.input.setValue(opt?.value)
         this.opened.set(false)
