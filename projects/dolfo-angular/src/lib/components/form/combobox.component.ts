@@ -8,7 +8,7 @@ import { BaseFormInput } from "./base-form-input"
 @Component({
     selector: "dolfo-combobox",
     template: `<dolfo-input-container>
-		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="opened.set(true); onFocus.emit($event)" (blur)="onBlur.emit($event)">
+		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="opened.set(true); onFocus.emit($event)" (blur)="onBlur.emit($event)" [class.disabled]="input.disabled">
 			<div class="combobox-label">
 				<span>{{ extractLabel() | translate }}</span>
 			</div>

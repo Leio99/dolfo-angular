@@ -5,6 +5,11 @@
     @include no-outline;
     z-index: 1;
 
+    &.disabled{
+        cursor: not-allowed;
+        color: #666
+    }
+
     &.autocomplete{
         padding: 0
     }
