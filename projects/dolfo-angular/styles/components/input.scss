@@ -26,7 +26,7 @@
     }
 
     &.error{
-        input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"], input[type="number"]{
+        input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"], input[type="number"], input[type="date"]{
             border-color: $error !important;
             background-color: rgba(217, 16, 16, 0.07) !important
         }
