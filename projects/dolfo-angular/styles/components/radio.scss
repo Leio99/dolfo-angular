@@ -1,0 +1,45 @@
+.radio-item{
+    @include inline-flex;
+    @include align-center;
+    gap: 0.3rem;
+    margin-right: 0.5rem;
+
+    label{
+        @include pointer
+    }
+}
+
+input[type="radio"]{
+    @include inline-flex;
+    @include align-center;
+    @include justify-center;
+    @include align-middle;
+    @include pointer;
+    margin: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 50px;
+    border: 1px solid #ccc;
+    background-color: $white;
+    width: 20px;
+    height: 20px;
+    color: $white;
+
+    &:before{
+        font-family: "icomoon";
+        content: "\ea10";
+        font-size: 9px
+    }
+
+    &:checked{
+        background-color: $primary
+    }
+
+    &[disabled]{
+        cursor: not-allowed;
+
+        &:checked{
+            background-color: $placeholder
+        }
+    }
+}
