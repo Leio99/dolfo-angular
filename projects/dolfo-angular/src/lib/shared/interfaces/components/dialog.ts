@@ -31,7 +31,8 @@ export type IDialogInput = {
     width?: number
     hideCloseX?: boolean
     form?: DialogForm
-    component?: DialogComponentInput
+    component?: DialogComponentInput,
+    buttons?: DialogFooterButton[]
 }
 
 export interface DialogComponentInput{

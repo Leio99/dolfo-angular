@@ -16,7 +16,9 @@ import { DialogService } from "../../../shared/services"
 
         <dolfo-dialog-content>
             <div [class.loading]="type === 'loading'">
-                <span [innerHTML]="sanitizeMsg()"></span>
+                @if(message){
+                    <span [innerHTML]="sanitizeMsg()"></span>
+                }
 
                 @if(form && formGroup){
                     <form [formGroup]="formGroup">
@@ -44,7 +46,7 @@ import { DialogService } from "../../../shared/services"
             </div>
         </dolfo-dialog-content>
 
-        @let footer = getFooter();
+        @let footer = buttons || getFooter();
 
         @if(footer){
             <dolfo-dialog-footer [buttons]="footer"></dolfo-dialog-footer>
@@ -60,6 +62,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
     @Input() hideCloseX = false
     @Input() form: DialogForm
     @Input() component: DialogComponentInput
+    @Input() buttons: DialogFooterButton[]
     public formGroup: FormGroup
     
     protected dialogService = inject(DialogService)
