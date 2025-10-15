@@ -14,18 +14,15 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
 
     private changeInternal: (obj: T) => void
     private cc = inject(ControlContainer)
-
+    
     public input = new FormControl<T>(null)
-
+    
     protected control: AbstractControl
 
     ngOnInit(){
         this.control = this.cc.control.get(this.formControlName)
 
         const initialValue = this.control.value
-
-        if(this.control.disabled)
-            this.input.disable()
 
         this.addSubscription(this.input.valueChanges.pipe(
             filter(v => !this.control.touched && !isDeepEqual(initialValue, v) && this.input.dirty)
@@ -53,7 +50,7 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
 
     setDisabledState = (isDisabled: boolean) => {
         if(isDisabled)
-            this.input.disable()
+            setTimeout(() => this.input.disable())
         else
             this.input.enable()
     }

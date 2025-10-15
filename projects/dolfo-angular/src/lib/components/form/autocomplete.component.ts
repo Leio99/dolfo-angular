@@ -80,6 +80,10 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         this.addSubscription(this.input.valueChanges.pipe(
             filter(v => v == null && !!this.autocompleteInput && this.autocompleteInput.nativeElement.value != null && this.autocompleteInput.nativeElement.value !== "")
         ).subscribe(() => this.setOption(null, true)))
+
+        this.addSubscription(this.input.statusChanges.pipe(
+            filter(() => !!this.autocompleteInput)
+        ).subscribe(() => this.autocompleteInput.nativeElement.disabled = this.input.disabled))
     }
 
     override ngAfterViewInit() {
