@@ -1,7 +1,7 @@
 import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { filter, fromEvent, map } from "rxjs"
-import { ComboInput, ComboOption } from "../../shared/interfaces"
+import { ComboInput, ComboOption, isDeepEqual } from "../../shared/interfaces"
 import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
 
@@ -32,7 +32,7 @@ import { BaseFormInput } from "./base-form-input"
     ],
     standalone: false
 })
-export class ComboboxComponent extends BaseFormInput<number | number[]> implements AfterViewInit, Required<ComboInput>, OnBlur, OnFocus{
+export class ComboboxComponent extends BaseFormInput<any | any[]> implements AfterViewInit, Required<ComboInput>, OnBlur, OnFocus{
 	@ViewChild("combo") combo: ElementRef<HTMLDivElement>
 	@Input({ required: true }) options: ComboOption[]
 	@Input() placeHolder: string
@@ -92,26 +92,26 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 			return this.placeHolder || " "
 
 		if(!this.multiple)
-			return this.options.find(opt => opt.value === value).label
+			return this.options.find(opt => isDeepEqual(opt.value, value)).label
 
-		return this.options.filter(opt => (value as number[]).includes(opt.value)).map(opt => opt.label).join(", ")
+		return this.options.filter(opt => (value as number[]).some(o => isDeepEqual(opt.value, o))).map(opt => opt.label).join(", ")
 	}
 
 	public setOption = (opt: ComboOption) => {
 		const { value } = this.input
 
 		if(!this.multiple){
-			if(value === opt.value)
+			if(isDeepEqual(value, opt.value))
 				this.input.setValue(null)
 			else
 				this.input.setValue(opt.value)
 
             this.opened.set(false)
 		}else{
-			const castValue = value as number[]
+			const castValue = value as Array<any>
 
-			if(castValue.includes(opt.value))
-				this.input.setValue(castValue.filter(v => v !== opt.value))
+			if(castValue.some(o => isDeepEqual(opt.value, o)))
+				this.input.setValue(castValue.filter(v => isDeepEqual(opt.value, v)))
 			else
 				this.input.setValue(castValue.concat(opt.value))
 		}
@@ -123,8 +123,8 @@ export class ComboboxComponent extends BaseFormInput<number | number[]> implemen
 		const { value } = this.input
 
 		if(!this.multiple)
-			return value === opt.value
+			return isDeepEqual(value, opt.value)
 
-		return (value as number[]).includes(opt.value)
+		return (value as Array<any>).some(o => isDeepEqual(opt.value, o))
 	}
 }
