@@ -39,14 +39,14 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
                     control.markAsTouched()
                     control.updateValueAndValidity()
 
-                    if(!control.valid && !focused){
+                    if(control.invalid && !focused){
                         this.inputs.toArray().find(i => i.formControlName === key).container.focus()
                         focused = true
                     }
                 })
             }),
             mergeMap(() => {
-                if(this.formRef.valid && !this.loading$.getValue()){
+                if(!this.formRef.invalid && !this.loading$.getValue()){
                     this.loading$.next(true)
                     return this.submit(this.formRef.form.getRawValue()).pipe(
                         catchError(err => {

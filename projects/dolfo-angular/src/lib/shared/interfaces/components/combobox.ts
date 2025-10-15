@@ -11,7 +11,7 @@ export interface ComboInput{
     readonly multiple?: boolean
 }
 
-export interface ComboboxConfig<T>{
+export interface AutocompleteConfig<T>{
     search$: (filter: string) => Observable<T[]>
     getLabel: (item: T) => string
 }

@@ -9,11 +9,10 @@ import { DatepickerComponent } from "./datepicker.component"
 import { InputContainerComponent } from "./input-container.component"
 import { InputRadioComponent } from "./input-radio.component"
 import { InputTextComponent } from "./input-text.component"
-import { InputTimeComponent } from "./input-time.component"
 
 @NgModule({
-    declarations: [InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputTimeComponent, InputRadioComponent],
+    declarations: [InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent],
     imports: [CommonModule, ReactiveFormsModule, TranslatePipe, DirectivesModule],
-    exports: [ReactiveFormsModule, InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputTimeComponent, InputRadioComponent]
+    exports: [ReactiveFormsModule, InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent]
 })
 export class FormModule {}

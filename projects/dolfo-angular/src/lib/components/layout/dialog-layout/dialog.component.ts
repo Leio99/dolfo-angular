@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from "@angular/core"
 import { FormGroup } from "@angular/forms"
+import { DomSanitizer } from "@angular/platform-browser"
 import { Observable, of } from "rxjs"
 import { Formable } from "../../../shared/classes"
 import { DialogActionType, DialogComponentInput, DialogFooterButton, DialogForm, DialogIcon, DialogType, IDialogInput } from "../../../shared/interfaces"
@@ -15,17 +16,26 @@ import { DialogService } from "../../../shared/services"
 
         <dolfo-dialog-content>
             <div [class.loading]="type === 'loading'">
-                <span [innerHTML]="message"></span>
+                <span [innerHTML]="sanitizeMsg()"></span>
 
                 @if(form && formGroup){
                     <form [formGroup]="formGroup">
                         @for(f of form; track f.name){
                             @switch(f.type){
                                 @case("date"){
-                                    <dolfo-datepicker [formControlName]="f.name"></dolfo-datepicker>
+                                    <dolfo-datepicker [formControlName]="f.name" [label]="f.label"></dolfo-datepicker>
+                                }
+                                @case("autocomplete"){
+                                    <dolfo-autocomplete [formControlName]="f.name" [label]="f.label" [config]="f.autocompleteCfg"></dolfo-autocomplete>
+                                }
+                                @case("radio"){
+                                    <dolfo-input-radio [formControlName]="f.name" [label]="f.label" [options]="f.options"></dolfo-input-radio>
+                                }
+                                @case("combobox"){
+                                    <dolfo-combobox [formControlName]="f.name" [label]="f.label" [options]="f.options"></dolfo-combobox>
                                 }
                                 @default{
-                                    <dolfo-input-text [formControlName]="f.name" [type]="f.type"></dolfo-input-text>
+                                    <dolfo-input-text [formControlName]="f.name" [type]="f.type" [label]="f.label"></dolfo-input-text>
                                 }
                             }
                         }
@@ -53,6 +63,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
     public formGroup: FormGroup
     
     protected dialogService = inject(DialogService)
+    private sanitizer = inject(DomSanitizer)
 
     ngOnInit() {
         if(this.form){
@@ -78,7 +89,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
         if(type === DialogActionType.OK && this.formGroup && this.formRef){
             this.formRef.ngSubmit.emit()
 
-            if(!this.formGroup.valid)
+            if(this.formGroup.invalid)
                 return
         }
 
@@ -111,4 +122,6 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
             color: "secondary"
         }]
     }
+
+    public sanitizeMsg = () => this.sanitizer.bypassSecurityTrustHtml(this.message)
 }

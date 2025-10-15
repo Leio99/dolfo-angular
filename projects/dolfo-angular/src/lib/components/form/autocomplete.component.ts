@@ -1,7 +1,7 @@
 import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { delay, filter, fromEvent, map, mergeMap, tap } from "rxjs"
-import { ComboboxConfig, ComboOption } from "../../shared/interfaces"
+import { AutocompleteConfig, ComboOption } from "../../shared/interfaces"
 import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
 
@@ -44,7 +44,7 @@ import { BaseFormInput } from "./base-form-input"
 export class AutocompleteComponent extends BaseFormInput<any> implements AfterViewInit, OnFocus, OnBlur{
     @ViewChild("autocomplete") autocomplete: ElementRef<HTMLDivElement>
     @ViewChild("autocompleteInput") autocompleteInput: ElementRef<HTMLInputElement>
-    @Input({ required: true }) config: ComboboxConfig<any>
+    @Input({ required: true }) config: AutocompleteConfig<any>
     @Input() minChars = 3
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()

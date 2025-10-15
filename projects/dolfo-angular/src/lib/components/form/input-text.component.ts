@@ -12,7 +12,6 @@ import { BaseFormInput } from "./base-form-input"
         }@else{
             <input #formInput [name]="formControlName" [type]="type" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" />
         }
-        <ng-template></ng-template>
     </dolfo-input-container>`,
     providers: [
         { provide: NG_VALUE_ACCESSOR, useExisting: forwardRef(() => InputTextComponent), multi: true },
