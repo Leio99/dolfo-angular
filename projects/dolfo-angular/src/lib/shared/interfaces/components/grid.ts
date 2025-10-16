@@ -33,6 +33,7 @@ export interface IGridConfig<T>{
     readonly selection?: {
         readonly type?: "single" | "multiple"
         readonly showSelectAll?: boolean
+        readonly defaultSelected?: (item: T) => boolean
     }
     readonly events?: {
         onRowClick?: (item: T) => void
@@ -63,6 +64,9 @@ export class GridConfig<T>{
             this.config.items.subscribe(it => {
                 this.toggleLoading()
                 this.items$.next(it)
+                
+                if(this.getSelectionConfig()?.defaultSelected)
+                    this.selectedItems = it.filter(i => this.getSelectionConfig().defaultSelected(i))
             })
         }
     }
