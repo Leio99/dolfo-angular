@@ -1,4 +1,5 @@
 import { Component, Input } from "@angular/core"
+import { DomSanitizer } from "@angular/platform-browser"
 import { ColumnDataType, GridColumn, GridConfig } from "../../../shared/interfaces"
 import { TranslateService } from "../../../shared/services"
 
@@ -10,7 +11,7 @@ import { TranslateService } from "../../../shared/services"
 export class GridComponent<T>{
 	@Input({ required: true }) config: GridConfig<T>
 
-	constructor(private translateService: TranslateService){}
+	constructor(private translateService: TranslateService, private sanitizer: DomSanitizer){}
 
 	public resolveField = (item: T, { field, formatter, dataType }: GridColumn) => {
         let value = field
@@ -23,6 +24,8 @@ export class GridComponent<T>{
         else if(dataType === ColumnDataType.DATETIME)
 			value = this.translateService.formatDateTime(value)
 
-        return formatter ? formatter(value) : value
+        const retValue = formatter ? formatter(value) : value
+        
+        return this.sanitizer.bypassSecurityTrustHtml(retValue)
     }
 }
