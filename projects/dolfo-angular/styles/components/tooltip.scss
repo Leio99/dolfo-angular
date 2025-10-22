@@ -6,12 +6,19 @@
     background-color: rgba(0, 0, 0, 0.8);
     color: $white;
     padding: 0.1rem 0.4rem;
-    pointer-events: none;
-    opacity: 0;
     word-break: keep-all;
 
-    &.show{
-        animation: show 0.2s ease forwards 0.5s
+    &:not(.popover){
+        pointer-events: none;
+        opacity: 0;
+
+        &.show{
+            animation: show 0.2s ease forwards 0.5s
+        }
+    }
+
+    &.popover{
+        max-width: 300px
     }
 
     &::after{

@@ -28,6 +28,7 @@ export * from "./lib/components/layout/icon.component"
 export * from "./lib/components/layout/layout.module"
 export * from "./lib/components/layout/loader.component"
 export * from "./lib/components/layout/notification.component"
+export * from "./lib/components/layout/popover.component"
 export * from "./lib/components/layout/tooltip.component"
 
 // Classes
@@ -39,6 +40,7 @@ export * from "./lib/shared/interfaces"
 // Directives
 export * from "./lib/shared/directives/context-menu.directive"
 export * from "./lib/shared/directives/directives.module"
+export * from "./lib/shared/directives/popover.directive"
 export * from "./lib/shared/directives/scroll-drag.directive"
 export * from "./lib/shared/directives/tooltip.directive"
 

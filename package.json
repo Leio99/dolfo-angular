@@ -6,9 +6,9 @@
         "publish-library": "npm publish ./dist"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "^20.3.4",
-        "@angular/build": "^20.3.4",
-        "@angular/cli": "^20.3.4",
+        "@angular-devkit/build-angular": "^20.3.6",
+        "@angular/build": "^20.3.6",
+        "@angular/cli": "^20.3.6",
         "ng-packagr": "^20.3.0"
     }
 }

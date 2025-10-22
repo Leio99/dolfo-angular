@@ -3,14 +3,16 @@ import { distinctUntilChanged, filter, map, tap } from "rxjs"
 import { CONTEXT_MENU_DESTROY_TOKEN, ContextMenuComponent } from "../../components/layout/context-menu.component"
 import { DialogComponent } from "../../components/layout/dialog-layout/dialog.component"
 import { NotificationComponent } from "../../components/layout/notification.component"
+import { POPOVER_DESTROY_TOKEN, PopoverComponent } from "../../components/layout/popover.component"
 import { TOOLTIP_DESTROY_TOKEN, TooltipComponent } from "../../components/layout/tooltip.component"
 import { IDialogInput, isDeepEqual } from "../interfaces"
-import { ContextMenuService, DialogService, NotificationService, TooltipService } from "../services"
+import { ContextMenuService, DialogService, NotificationService, PopoverService, TooltipService } from "../services"
 
 export class OverlayManager{
     private dialog: [ComponentRef<IDialogInput>, number][] = []
     private notification: ComponentRef<NotificationComponent>
     private tooltip: ComponentRef<TooltipComponent>
+    private popover: ComponentRef<PopoverComponent>
     private contextMenu: ComponentRef<ContextMenuComponent>
     
     constructor(private injector: Injector, private container: ViewContainerRef){}
@@ -20,6 +22,7 @@ export class OverlayManager{
         ns = this.injector.get(NotificationService),
         ts = this.injector.get(TooltipService),
         cs = this.injector.get(ContextMenuService),
+        ps = this.injector.get(PopoverService),
         environmentInjector = this.injector.get(EnvironmentInjector)
 
         return [
@@ -76,6 +79,24 @@ export class OverlayManager{
                 Object.entries(input).forEach(([k, v]) => this.tooltip.setInput(k, v))
     
                 this.container.insert(this.tooltip.hostView)
+            }),
+            ps.getPopover$().pipe(
+                tap(() => {
+                    if(this.popover)
+                        this.popover.destroy()
+                }),
+                filter(input => !!input)
+            ).subscribe(input => {
+                this.popover = createComponent(PopoverComponent, {
+                    environmentInjector,
+                    elementInjector: Injector.create({
+                        providers: [{ provide: POPOVER_DESTROY_TOKEN, useValue: () => this.popover.destroy() }]
+                    })
+                })
+    
+                Object.entries(input).forEach(([k, v]) => this.popover.setInput(k, v))
+    
+                this.container.insert(this.popover.hostView)
             }),
             cs.getContextMenu$().pipe(
                 distinctUntilChanged((a, b) => isDeepEqual(a, b)),
