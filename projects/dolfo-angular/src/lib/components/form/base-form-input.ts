@@ -29,7 +29,7 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
         ).subscribe(() => this.control.markAsTouched()))
 
         this.addSubscription(this.control.statusChanges.pipe(
-            filter(s => (s === "VALID" || s === "INVALID") && this.control.touched)
+            filter(s => (s === "VALID" || s === "INVALID") && this.control.touched && !!this.container)
         ).subscribe(() => this.container.errors$.next(this.control.errors)))
     }
 

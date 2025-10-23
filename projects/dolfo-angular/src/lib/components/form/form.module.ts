@@ -6,13 +6,14 @@ import { TranslatePipe } from "../../shared/pipes/translate.pipe"
 import { AutocompleteComponent } from "./autocomplete.component"
 import { ComboboxComponent } from "./combobox.component"
 import { DatepickerComponent } from "./datepicker.component"
+import { InputCheckboxComponent } from "./input-checkbox.component"
 import { InputContainerComponent } from "./input-container.component"
 import { InputRadioComponent } from "./input-radio.component"
 import { InputTextComponent } from "./input-text.component"
 
 @NgModule({
-    declarations: [InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent],
+    declarations: [InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent, InputCheckboxComponent],
     imports: [CommonModule, ReactiveFormsModule, TranslatePipe, DirectivesModule],
-    exports: [ReactiveFormsModule, InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent]
+    exports: [ReactiveFormsModule, InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent, InputCheckboxComponent]
 })
 export class FormModule {}

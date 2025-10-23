@@ -3,7 +3,7 @@
     @include rounded;
     padding: 0.3rem 0.5rem;
     background-color: $white;
-    border: 1px solid #888;
+    border: 1px solid $inputBorder;
     width: 100%;
     font: inherit;
 
@@ -54,30 +54,5 @@
     textarea{
         resize: none;
         min-height: 100px
-    }
-}
-
-input[type="checkbox"]{
-    @include rounded;
-    @include inline-flex;
-    @include align-center;
-    @include justify-center;
-    @include pointer;
-    appearance: none;
-    -webkit-appearance: none;
-    border: 1px solid #ccc;
-    background-color: $white;
-    width: 20px;
-    height: 20px;
-    color: $white;
-
-    &:before{
-        font-family: "icomoon";
-        content: "\ea10";
-        font-size: 9px
-    }
-
-    &:checked{
-        background-color: $primary
     }
 }

@@ -1,6 +1,6 @@
 {
     "name": "dolfo-angular",
-    "version": "1.176.0",
+    "version": "1.180.0",
     "scripts": {
         "update-version": "npm --no-git-tag-version version minor"
     },
@@ -15,8 +15,8 @@
     },
     "sideEffects": false,
     "devDependencies": {
-        "@angular-devkit/build-angular": "^20.3.5",
-        "@angular/build": "^20.3.5",
-        "@types/node": "^24.7.2"
+        "@angular-devkit/build-angular": "^20.3.7",
+        "@angular/build": "^20.3.7",
+        "@types/node": "^24.9.1"
     }
 }
