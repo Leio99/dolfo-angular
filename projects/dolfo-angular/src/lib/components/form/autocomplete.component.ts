@@ -10,7 +10,7 @@ import { BaseFormInput } from "./base-form-input"
     template: `<dolfo-input-container>
         <div class="combobox autocomplete" [class.opened]="opened()" #autocomplete>
             <div class="combobox-label">
-                <input #autocompleteInput type="text" [value]="currentOption()" (focus)="onFocus.emit($event); opened.set(true)" (blur)="onBlur.emit($event)" />
+                <input #autocompleteInput type="text" [value]="currentOption()" (focus)="focus($event)" (blur)="onBlur.emit($event)" />
             </div>
 
             <div class="combobox-options" [class.opened]="opened()">
@@ -62,7 +62,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         super()
 
         this.addSubscription(fromEvent(window, "click").pipe(
-            filter(() => !!this.autocomplete),
+            filter(() => !!this.autocomplete && !this.input.disabled),
             map(ev => ev.target as HTMLElement),
             map(target => !this.autocomplete.nativeElement.contains(target) && !target.isEqualNode(this.autocomplete.nativeElement))
         ).subscribe(condition => {
@@ -138,6 +138,14 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
             }
         }))
     }
+
+	public focus = (e: FocusEvent) => {
+		if(this.input.disabled)
+			return
+		
+		this.opened.set(true); 
+		this.onFocus.emit(e)
+	}
 
 	public isSelected = (opt: ComboOption) => this.input.value === opt.value
 

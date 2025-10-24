@@ -8,7 +8,7 @@ import { BaseFormInput } from "./base-form-input"
 @Component({
     selector: "dolfo-combobox",
     template: `<dolfo-input-container>
-		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="opened.set(true); onFocus.emit($event)" (blur)="onBlur.emit($event)" [class.disabled]="input.disabled">
+		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="focus($event)" (blur)="onBlur.emit($event)" [class.disabled]="input.disabled">
 			<div class="combobox-label">
 				<span>{{ extractLabel() | translate }}</span>
 			</div>
@@ -47,7 +47,7 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 		super()
 
 		this.addSubscription(fromEvent(window, "click").pipe(
-            filter(() => !!this.combo),
+            filter(() => !!this.combo && !this.input.disabled),
 			map(ev => ev.target as HTMLElement),
 			map(target => !this.combo.nativeElement.contains(target) && !target.isEqualNode(this.combo.nativeElement))
 		).subscribe(condition => {
@@ -95,6 +95,14 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 			return this.options.find(opt => isDeepEqual(opt.value, value)).label
 
 		return this.options.filter(opt => (value as number[]).some(o => isDeepEqual(opt.value, o))).map(opt => opt.label).join(", ")
+	}
+
+	public focus = (e: FocusEvent) => {
+		if(this.input.disabled)
+			return
+		
+		this.opened.set(true); 
+		this.onFocus.emit(e)
 	}
 
 	public setOption = (opt: ComboOption) => {
