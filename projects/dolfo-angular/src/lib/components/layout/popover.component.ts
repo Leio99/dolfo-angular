@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, InjectionToken, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
 import { DomSanitizer } from "@angular/platform-browser"
-import { BehaviorSubject, filter, fromEvent, map, Observable, race, zip } from "rxjs"
+import { BehaviorSubject, filter, fromEvent, map, race, zip } from "rxjs"
 import { Subscriptable } from "../../shared/classes"
 import { IPopover, TooltipDirection } from "../../shared/interfaces"
 
@@ -48,9 +48,6 @@ export class PopoverComponent extends Subscriptable implements OnInit, AfterView
             fromEvent<MouseEvent>(window, "click").pipe(
                 map(e => e.target as HTMLElement),
                 filter(el => !el.isEqualNode(this.tooltipRef.nativeElement) && !this.tooltipRef.nativeElement.contains(el))
-            ),
-            this.observeOnMutation(document.body, { childList: true, subtree: true }).pipe(
-                filter(events => events.some(e => Array.from(e.removedNodes).some(d => d.isEqualNode(this.elementRef.nativeElement) || d.contains(this.elementRef.nativeElement))))
             )
         ]).subscribe(this.destroyFn))
 
@@ -79,12 +76,6 @@ export class PopoverComponent extends Subscriptable implements OnInit, AfterView
     ngAfterViewInit() {
         this.addSubscription(this.currentDirection$.asObservable().subscribe(() => setTimeout(() => this.calculatePosition())))
     }
-
-    private observeOnMutation = (target: HTMLElement, config: MutationObserverInit) => new Observable<MutationRecord[]>(observer => {
-        const mutation = new MutationObserver(mutations => observer.next(mutations))
-        mutation.observe(target, config)
-        return () => mutation.disconnect()
-    })
 
     private calculatePosition = () => {
         const { elementRef, tooltipRef, currentDirection$ } = this,

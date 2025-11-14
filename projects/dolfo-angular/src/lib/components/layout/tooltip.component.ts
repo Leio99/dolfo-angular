@@ -1,5 +1,5 @@
 import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, inject, InjectionToken, Input, OnInit, ViewChild } from "@angular/core"
-import { BehaviorSubject, filter, fromEvent, Observable, race, zip } from "rxjs"
+import { BehaviorSubject, filter, fromEvent, race, zip } from "rxjs"
 import { Subscriptable } from "../../shared/classes"
 import { ITooltip, TooltipDirection } from "../../shared/interfaces"
 
@@ -40,10 +40,7 @@ export class TooltipComponent extends Subscriptable implements OnInit, AfterView
         this.addSubscription(race([
             fromEvent(window, "resize"),
             fromEvent(window, "scroll", { capture: true }),
-            fromEvent(this.elementRef.nativeElement, "mouseleave"),
-            this.observeOnMutation(document.body, { childList: true, subtree: true }).pipe(
-                filter(events => events.some(e => Array.from(e.removedNodes).some(d => d.isEqualNode(this.elementRef.nativeElement) || d.contains(this.elementRef.nativeElement))))
-            )
+            fromEvent(this.elementRef.nativeElement, "mouseleave")
         ]).subscribe(this.destroyFn))
 
         this.addSubscription(zip([this.x$, this.y$]).pipe(
@@ -71,12 +68,6 @@ export class TooltipComponent extends Subscriptable implements OnInit, AfterView
     ngAfterViewInit() {
         this.addSubscription(this.currentDirection$.asObservable().subscribe(() => setTimeout(() => this.calculatePosition())))
     }
-
-    private observeOnMutation = (target: HTMLElement, config: MutationObserverInit) => new Observable<MutationRecord[]>(observer => {
-        const mutation = new MutationObserver(mutations => observer.next(mutations))
-        mutation.observe(target, config)
-        return () => mutation.disconnect()
-    })
 
     private calculatePosition = () => {
         const { elementRef, tooltipRef, currentDirection$ } = this,
