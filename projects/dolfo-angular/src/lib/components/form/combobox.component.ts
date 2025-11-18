@@ -8,10 +8,12 @@ import { BaseFormInput } from "./base-form-input"
 @Component({
     selector: "dolfo-combobox",
     template: `<dolfo-input-container>
-		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="focus($event)" (blur)="onBlur.emit($event)" [class.disabled]="input.disabled">
+		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="focus($event)" (blur)="onBlur.emit($event); opened.set(false)" [class.disabled]="input.disabled">
 			<div class="combobox-label">
                 @if(hasValue && !input.disabled){
                     <dolfo-icon [dolfoTooltip]="'form.resetValue' | translate" name="cross" (click)="input.setValue(null); $event.stopPropagation()"></dolfo-icon>
+                }@else {
+                    <dolfo-icon name="circle-down" class="combo-icon"></dolfo-icon>
                 }
 				<span>{{ comboLabel() | translate }}</span>
 			</div>

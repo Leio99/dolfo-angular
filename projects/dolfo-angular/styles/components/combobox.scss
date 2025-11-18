@@ -26,6 +26,10 @@
             right: 0.5rem;
             transform: translateY(-50%);
 
+            &.combo-icon{
+                pointer-events: none
+            }
+
             &:not(:hover){
                 opacity: 0.6
             }
