@@ -1,4 +1,4 @@
-import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
+import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, Output, signal, SimpleChanges, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { filter, fromEvent, map } from "rxjs"
 import { ComboInput, ComboOption, isDeepEqual } from "../../shared/interfaces"
@@ -10,7 +10,10 @@ import { BaseFormInput } from "./base-form-input"
     template: `<dolfo-input-container>
 		<div class="combobox" [class.opened]="opened()" #combo tabindex="0" (focus)="focus($event)" (blur)="onBlur.emit($event)" [class.disabled]="input.disabled">
 			<div class="combobox-label">
-				<span>{{ extractLabel() | translate }}</span>
+                @if(hasValue && !input.disabled){
+                    <dolfo-icon [dolfoTooltip]="'form.resetValue' | translate" name="cross" (click)="input.setValue(null); $event.stopPropagation()"></dolfo-icon>
+                }
+				<span>{{ comboLabel() | translate }}</span>
 			</div>
 
 			<div class="combobox-options" [class.opened]="opened()">
@@ -32,7 +35,7 @@ import { BaseFormInput } from "./base-form-input"
     ],
     standalone: false
 })
-export class ComboboxComponent extends BaseFormInput<any | any[]> implements AfterViewInit, Required<ComboInput>, OnBlur, OnFocus{
+export class ComboboxComponent extends BaseFormInput<any | any[]> implements AfterViewInit, Required<ComboInput>, OnBlur, OnFocus, OnChanges{
 	@ViewChild("combo") combo: ElementRef<HTMLDivElement>
 	@Input({ required: true }) options: ComboOption[]
 	@Input() placeHolder: string
@@ -42,6 +45,7 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 
 	public opened = signal(false)
     public currentFocus = signal<number>(null)
+    public comboLabel = signal("")
 
 	constructor(private cdr: ChangeDetectorRef){
 		super()
@@ -56,7 +60,14 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 			else if(!this.opened() && !condition)
 				this.opened.set(true)
 		}))
+
+        this.addSubscription(this.input.valueChanges.subscribe(value => this.comboLabel.set(this.extractLabel(value))))
 	}
+
+    ngOnChanges(changes: SimpleChanges) {
+        if(changes.options && !isDeepEqual(changes.options.previousValue, changes.options.currentValue))
+            this.input.setValue(null)
+    }
 
 	override ngAfterViewInit() {
 		super.ngAfterViewInit()
@@ -85,14 +96,12 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
         }))
 	}
 
-	public extractLabel = () => {
-		const { value } = this.input
-
+	private extractLabel = (value: any | any[]) => {
 		if(value == null || (value as number[])?.length === 0)
 			return this.placeHolder || " "
 
 		if(!this.multiple)
-			return this.options.find(opt => isDeepEqual(opt.value, value)).label
+			return this.options.find(opt => isDeepEqual(opt.value, value))?.label
 
 		return this.options.filter(opt => (value as number[]).some(o => isDeepEqual(opt.value, o))).map(opt => opt.label).join(", ")
 	}
@@ -135,4 +144,8 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 
 		return (value as Array<any>).some(o => isDeepEqual(opt.value, o))
 	}
+
+    public get hasValue(){
+        return this.multiple ? this.input.value != null && this.input.value.length > 0 : this.input.value != null
+    }
 }

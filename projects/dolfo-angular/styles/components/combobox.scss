@@ -19,6 +19,18 @@
         @include align-center;
         @include relative;
 
+        dolfo-icon{
+            @include absolute;
+            @include pointer;
+            top: 50%;
+            right: 0.5rem;
+            transform: translateY(-50%);
+
+            &:not(:hover){
+                opacity: 0.6
+            }
+        }
+
         input{
             border: 0;
             box-shadow: unset !important;
@@ -28,7 +40,8 @@
         > span{
             @include block;
             @include ellipsis-text;
-            width: 100%
+            width: 100%;
+            padding-right: 1.5rem
         }
     }
 
