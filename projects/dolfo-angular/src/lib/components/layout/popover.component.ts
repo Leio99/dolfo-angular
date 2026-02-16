@@ -14,7 +14,7 @@ export const POPOVER_DESTROY_TOKEN = new InjectionToken<() => void>("POPOVER_DES
         top: (y$ | async) + 'px'
     }" [ngClass]="currentDirection$ | async" [class.show]="completed$ | async">
         @if(isTemplate()){
-            <ng-container [ngTemplateOutlet]="getContentTemplate()"></ng-container>
+            <ng-container [ngTemplateOutlet]="getContentTemplate()" [ngTemplateOutletContext]="context"></ng-container>
         }@else{
             <div [innerHTML]="getContentStr()"></div>
         }
@@ -26,6 +26,7 @@ export class PopoverComponent extends Subscriptable implements OnInit, AfterView
     @Input({ required: true }) content: string | TemplateRef<any>
     @Input({ required: true }) elementRef: ElementRef<HTMLElement>
     @Input({ required: true }) direction: TooltipDirection
+    @Input() context: any
 
     private destroyFn = inject(POPOVER_DESTROY_TOKEN)
     private checkCount = 0

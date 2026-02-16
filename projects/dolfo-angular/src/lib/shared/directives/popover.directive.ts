@@ -10,6 +10,7 @@ import { PopoverService } from "../services"
 })
 export class PopoverDirective extends Subscriptable{
     @Input({ required: true, alias: "dolfoPopover" }) content: string | TemplateRef<any>
+    @Input({ alias: "dolfoPopoverContext" }) context: any
     @Input() direction: TooltipDirection = "top"
 
     constructor(private el: ElementRef<HTMLElement>, private ps: PopoverService) {
@@ -27,7 +28,8 @@ export class PopoverDirective extends Subscriptable{
             ).subscribe(() => this.ps.showPopover({
                 content: this.content,
                 elementRef: this.el,
-                direction: this.direction
+                direction: this.direction,
+                context: this.context
             }))
         )
     }
