@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, ViewChild } from "@angular/core"
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, EventEmitter, forwardRef, Input, Output, signal, TemplateRef, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { delay, filter, fromEvent, map, mergeMap, tap } from "rxjs"
 import { AutocompleteConfig, ComboOption } from "../../shared/interfaces"
@@ -27,7 +27,11 @@ import { BaseFormInput } from "./base-form-input"
 
                 @for(opt of options(); track opt.value; let idx = $index){
                     <div class="combobox-option" [class.selected]="isSelected(opt)" [class.focused]="currentFocus() === idx" (click)="$event.stopPropagation(); setOption(opt)">
-                        <span>{{ opt.label }}</span>
+                        @if(resultTemplate){
+                            <ng-container [ngTemplateOutlet]="resultTemplate" [ngTemplateOutletContext]="{ item: opt }"></ng-container>
+                        }@else {
+                            <span>{{ opt.label }}</span>
+                        }
                     </div>
                 }
             </div>
@@ -46,6 +50,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
     @ViewChild("autocompleteInput") autocompleteInput: ElementRef<HTMLInputElement>
     @Input({ required: true }) config: AutocompleteConfig<any>
     @Input() minChars = 3
+    @Input() resultTemplate: TemplateRef<any>
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
 
