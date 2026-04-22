@@ -1,3 +1,5 @@
+import { FormControl, ValidationErrors } from "@angular/forms"
+
 export const isDeepEqual = (objA: any, objB: any, map = new WeakMap()) => {
     if (Object.is(objA, objB))
         return true
@@ -28,4 +30,12 @@ export const isDeepEqual = (objA: any, objB: any, map = new WeakMap()) => {
     }
 
     return true
+}
+
+
+export const passwordValidator = (control: FormControl): ValidationErrors => {
+    if(control.value?.match(/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/))
+        return { password: true }
+
+    return null
 }
