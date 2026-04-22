@@ -112,7 +112,7 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 		if(this.input.disabled)
 			return
 		
-		this.opened.set(true); 
+		this.opened.set(true)
 		this.onFocus.emit(e)
 	}
 

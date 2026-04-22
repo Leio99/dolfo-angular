@@ -31,7 +31,7 @@ button{
             &:not([disabled]):focus{
                 $newColor: color.adjust($color, $lightness: -10%);
                 background-color: $newColor;
-                color: getButtonTextColor($newColor);
+                color: getButtonTextColor($newColor)
             }
         }
     }

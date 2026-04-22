@@ -4,12 +4,12 @@
         "build-library": "ng build DolfoAngular",
         "new-version": "cd projects/dolfo-angular && npm run update-version && cd ../.. && npm run build-library && npm run publish-library",
         "publish-library": "npm publish ./dist",
-        "snapshot": "npm run build-library && rename dist dolfo-angular && move dolfo-angular C:\\Users\\leonardo.grandolfo\\Desktop\\Progetti\\organizer\\frontend\\node_modules\\"
+        "snapshot": "npm run build-library && rename dist dolfo-angular && move dolfo-angular C:\\Users\\leonardo.grandolfo\\Desktop\\Progetti\\tournaments\\frontend\\node_modules\\"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "^21.1.3",
-        "@angular/build": "^21.1.3",
-        "@angular/cli": "^21.1.3",
-        "ng-packagr": "^21.1.0"
+        "@angular-devkit/build-angular": "^21.2.7",
+        "@angular/build": "^21.2.7",
+        "@angular/cli": "^21.2.7",
+        "ng-packagr": "^21.2.3"
     }
 }

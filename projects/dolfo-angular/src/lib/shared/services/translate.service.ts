@@ -1,6 +1,6 @@
 import { formatDate } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { Inject, Injectable } from "@angular/core"
+import { inject, Inject, Injectable } from "@angular/core"
 import { BehaviorSubject, distinctUntilChanged, tap } from "rxjs"
 import { ILanguage, ILanguageToken, LANGUAGE_TOKEN, TRANSLATE_STORAGE_KEY } from "../interfaces"
 
@@ -11,8 +11,9 @@ export class TranslateService {
     private lang$ = new BehaviorSubject<ILanguage>(null)
     private langContent: Record<string, string>
     private langs: ILanguage[]
+    private httpClient = inject(HttpClient)
 
-    constructor(@Inject(LANGUAGE_TOKEN) langConfig: ILanguageToken, private httpClient: HttpClient) {
+    constructor(@Inject(LANGUAGE_TOKEN) langConfig: ILanguageToken) {
         if(!localStorage.getItem(TRANSLATE_STORAGE_KEY))
             localStorage.setItem(TRANSLATE_STORAGE_KEY, langConfig.defaultLanguage)
         

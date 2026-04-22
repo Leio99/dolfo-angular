@@ -61,7 +61,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
     public loading = signal(false)
     public currentFocus = signal<number>(null)
     private keyDown = false
-    private keyDownTimeout: NodeJS.Timeout
+    private keyDownTimeout: ReturnType<typeof setTimeout>
 
     constructor(){
         super()
@@ -148,7 +148,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
 		if(this.input.disabled)
 			return
 		
-		this.opened.set(true); 
+		this.opened.set(true)
 		this.onFocus.emit(e)
 	}
 
