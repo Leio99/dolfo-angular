@@ -1,4 +1,4 @@
-import { BehaviorSubject, Observable } from "rxjs"
+import { BehaviorSubject, map, Observable } from "rxjs"
 import { ButtonColor } from "./button"
 import { ContextMenuItem } from "./context-menu"
 
@@ -48,9 +48,11 @@ export class GridConfig<T>{
     private items$ = new BehaviorSubject<T[]>([])
     private loading$ = new BehaviorSubject(false)
     private selectedItems: T[]
+    private actions$ = new BehaviorSubject<IGridConfig<T>["actions"]>(null)
 
     constructor(private config: IGridConfig<T>){
         this.refreshGrid()
+        this.actions$.next(config.actions)
     }
 
     public refreshGrid = () => {
@@ -79,7 +81,11 @@ export class GridConfig<T>{
 
     public getList$ = () => this.items$.asObservable()
 
-    public getActions = (item: T) => this.config.actions?.(item)
+    public getActions$ = (item: T) => this.actions$.asObservable().pipe(
+        map(actions => actions?.(item))
+    )
+
+    public setActions = (actions: IGridConfig<T>["actions"]) => this.actions$.next(actions)
 
     public getColumns = () => this.config.columns
 
@@ -122,6 +128,6 @@ export class GridConfig<T>{
     public isAllSelected = () => this.selectedItems.length === this.items$.getValue().length
 
     public get hasActions(){
-        return !!this.config.actions
+        return !!this.actions$.getValue()
     }
 }

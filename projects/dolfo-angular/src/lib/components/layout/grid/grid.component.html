@@ -38,7 +38,7 @@
             
             @if(list.length > 0){
                 @for(item of list; track config.getUniqueId(item)){
-                    @let itemActions = config.getActions(item);
+                    @let itemActions = config.getActions$(item) | async;
                     @let rowClass = config.getRowClass(item);
     
                     <tr (click)="config.getEvents()?.onRowClick?.(item)" [dolfoContextMenu]="itemActions" position="bottom-right">
