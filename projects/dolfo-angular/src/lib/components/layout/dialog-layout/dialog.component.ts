@@ -9,7 +9,7 @@ import { DialogService } from "../../../shared/services"
 @Component({
     selector: "dolfo-dialog",
     standalone: false,
-    template: `<dolfo-dialog-layout [width]="width">
+    template: `<dolfo-dialog-layout [width]="width" [ngClass]="className">
         @if(title){
             <dolfo-dialog-header [title]="title" [showCloseX]="showCloseX()" [icon]="getIcon()"></dolfo-dialog-header>
         }
@@ -63,6 +63,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
     @Input() form: DialogForm
     @Input() component: DialogComponentInput
     @Input() buttons: DialogFooterButton[]
+    @Input() className: string
     public formGroup: FormGroup
     
     protected dialogService = inject(DialogService)

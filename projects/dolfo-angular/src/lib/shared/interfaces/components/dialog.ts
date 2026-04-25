@@ -29,6 +29,7 @@ export type IDialogInput = {
     message: string
     type?: DialogType
     width?: number
+    className?: string
     hideCloseX?: boolean
     form?: DialogForm
     component?: DialogComponentInput,
