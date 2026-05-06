@@ -12,7 +12,7 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
     @Input() label: string
     @Output() onChange: EventEmitter<T> = new EventEmitter<T>()
 
-    private changeInternal: (obj: T) => void
+    protected changeInternal: (obj: T) => void
     private cc = inject(ControlContainer)
     
     public input = new FormControl<T>(null)

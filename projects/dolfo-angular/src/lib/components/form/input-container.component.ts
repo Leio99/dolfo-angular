@@ -50,7 +50,7 @@ export class InputContainerComponent{
                 if(val.max)
                     return ["form.maxValue", { value: this.cp.transform(val.max.max, null, this.translateService.getLang().name) }]
 
-                return ["form.error." + Object.keys(val)[0]]
+                return ["form.error." + Object.keys(val)[0], val[Object.keys(val)[0]]]
             }
     
             return null

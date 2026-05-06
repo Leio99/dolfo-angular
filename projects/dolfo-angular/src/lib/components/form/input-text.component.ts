@@ -1,5 +1,6 @@
 import { Component, ElementRef, EventEmitter, forwardRef, Input, Output, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
+import { filter, map } from "rxjs"
 import { InputType } from "../../shared/interfaces"
 import { OnBlur, OnFocus } from "../../shared/interfaces/events"
 import { BaseFormInput } from "./base-form-input"
@@ -20,7 +21,7 @@ import { BaseFormInput } from "./base-form-input"
     ],
     standalone: false
 })
-export class InputTextComponent extends BaseFormInput<string> implements OnFocus, OnBlur{
+export class InputTextComponent extends BaseFormInput<string | number> implements OnFocus, OnBlur{
     @Input() type: InputType = "text"
     @Input() placeHolder = ""
     @Output() onFocus = new EventEmitter<FocusEvent>()
@@ -28,4 +29,18 @@ export class InputTextComponent extends BaseFormInput<string> implements OnFocus
     @ViewChild("formInput") formInput: ElementRef<HTMLInputElement | HTMLTextAreaElement>
 
     public focus = () => this.formInput.nativeElement.focus()
+
+    override ngAfterViewInit() {
+        if(this.type !== "number")
+            super.ngAfterViewInit()
+        else{
+            this.addSubscription(this.input.valueChanges.pipe(
+                filter(() => !this.input.disabled),
+                map(v => v != null && String(v).trim() !== "" ? Number(v) : null)
+            ).subscribe(v => {
+                this.onChange.emit(v)
+                this.changeInternal(v)
+            }))
+        }
+    }
 }
