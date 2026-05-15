@@ -1,5 +1,5 @@
 import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
-import { DialogActionType, DialogIcon } from "../../../shared/interfaces"
+import { DialogActionType, DialogIcon, IconName } from "../../../shared/interfaces"
 import { DialogService } from "../../../shared/services"
 
 @Component({
@@ -7,7 +7,7 @@ import { DialogService } from "../../../shared/services"
     template: `<ng-template>
         <h5>
             @if(icon){
-                <i [class]="'icon-' + icon.icon + ' fg-' + icon.color"></i>
+                <dolfo-icon [name]="getIcon()" [class]="'fg-' + icon.color"></dolfo-icon>
             }
             {{ title }}
         </h5>
@@ -36,4 +36,6 @@ export class DialogHeaderComponent implements OnInit{
         this.dialogService.action({ type: DialogActionType.CANCEL, data: null })
         this.dialogService.close()
     }
+
+    public getIcon = () => this.icon.icon as IconName
 }
