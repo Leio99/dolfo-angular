@@ -40,7 +40,7 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
                     control.updateValueAndValidity()
 
                     if(control.invalid && !focused){
-                        this.inputs.toArray().find(i => i.formControlName === key).container.focus()
+                        this.inputs.toArray().find(i => i.formControlName === key).container?.focus()
                         focused = true
                     }
                 })
