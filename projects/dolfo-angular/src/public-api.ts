@@ -39,9 +39,13 @@ export * from "./lib/shared/classes"
 // Interfaces
 export * from "./lib/shared/interfaces"
 
+// Interceptors
+export * from "./lib/shared/interceptors"
+
 // Directives
 export * from "./lib/shared/directives/context-menu.directive"
 export * from "./lib/shared/directives/directives.module"
+export * from "./lib/shared/directives/navigate.directive"
 export * from "./lib/shared/directives/popover.directive"
 export * from "./lib/shared/directives/scroll-drag.directive"
 export * from "./lib/shared/directives/tooltip.directive"
