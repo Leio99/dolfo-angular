@@ -1,11 +1,3 @@
-export enum StoreLists {
-    EMPTY
-}
-
-export type StorageListType = {
-    [StoreLists.EMPTY]: null
-}
-
 export enum StorageValues {
     TOKEN = "token",
     LANG = "lang"
@@ -14,7 +6,7 @@ export enum StorageValues {
 export interface IStore {
     readonly pressingCtrl: boolean
     readonly lists: {
-        [k in StoreLists]?: StorageListType[k][]
+        [x: string]: Array<any>
     }
     readonly entities: {
         [x: string]: any

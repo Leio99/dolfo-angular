@@ -2,7 +2,7 @@ import { Injectable, signal } from "@angular/core"
 import { BehaviorSubject, filter, fromEvent, tap, zip } from "rxjs"
 // ! Importante che venga importato con percorso preciso
 import { Subscriptable } from "../classes/subscriptable"
-import { IStore, StorageListType, StoreLists } from "../interfaces"
+import { IStore } from "../interfaces"
 
 @Injectable({
     providedIn: "root"
@@ -35,7 +35,7 @@ export class StoreService extends Subscriptable {
         pressingCtrl: false
     })
 
-    public addList = <K extends StoreLists>(key: K, list: StorageListType[K][]) => this.store$.next({
+    public addList = (key: string, list: Array<any>) => this.store$.next({
         ...this.store$.getValue(),
         lists: {
             ...this.store$.getValue().lists,
@@ -43,7 +43,7 @@ export class StoreService extends Subscriptable {
         }
     })
 
-    public getList = <K extends StoreLists>(key: K) => this.store$.getValue().lists[key] as StorageListType[K][]
+    public getList = <T>(key: string) => this.store$.getValue().lists[key] as T
 
     public addEntity = (key: string, entity: any) => this.store$.next({
         ...this.store$.getValue(),
