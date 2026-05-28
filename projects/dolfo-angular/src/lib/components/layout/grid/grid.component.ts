@@ -13,7 +13,7 @@ export class GridComponent<T>{
 
 	constructor(private translateService: TranslateService, private sanitizer: DomSanitizer){}
 
-	public resolveField = (item: T, { field, formatter, dataType }: GridColumn) => {
+	public resolveField = (item: T, { field, formatter, dataType, onLink }: GridColumn) => {
         let value = field
             .toString()
             .split(".")
@@ -24,8 +24,31 @@ export class GridComponent<T>{
         else if(dataType === ColumnDataType.DATETIME)
 			value = this.translateService.formatDateTime(value)
 
-        const retValue = formatter ? formatter(value) : value
+        let retValue = formatter ? formatter(value) : value
+
+		if(dataType === ColumnDataType.LINK)
+			retValue = `<a href="javascript:void(0)">${retValue}</a>`
         
         return this.sanitizer.bypassSecurityTrustHtml(retValue)
     }
+
+	public checkLink = (e: Event, col: GridColumn, item: T, cell: HTMLTableCellElement) => {
+		if(col.dataType !== ColumnDataType.LINK || !col.onLink)
+			return
+
+		const colValue = col.field
+            .toString()
+            .split(".")
+            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item),
+		htmlTarget = e.target as HTMLElement
+
+		if(htmlTarget.tagName.toLowerCase() === "a")
+			col.onLink(colValue)
+		else{
+			const a = cell.querySelector("a[href]")
+
+			if(a.contains(htmlTarget))
+				col.onLink(colValue)
+		}
+	}
 }

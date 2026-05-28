@@ -17,7 +17,7 @@ export class NavigateDirective extends Subscriptable{
     constructor(storeService: StoreService, router: Router, private elementRef: ElementRef<HTMLElement>) {
         super()
 
-        this.isLink = elementRef.nativeElement.tagName.toLocaleLowerCase() === "a"
+        this.isLink = elementRef.nativeElement.tagName.toLowerCase() === "a"
 
         this.addSubscription(fromEvent<MouseEvent>(elementRef.nativeElement, "click").subscribe(e => {
             if(this.isLink)

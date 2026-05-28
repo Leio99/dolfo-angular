@@ -8,7 +8,7 @@ export enum ColumnAlign{
     CENTER = "center"
 }
 
-export enum ColumnDataType{ TEXT, DATE, DATETIME }
+export enum ColumnDataType{ TEXT, DATE, DATETIME, LINK }
 
 export interface GridAction{
     readonly icon: string
@@ -25,6 +25,7 @@ export interface GridColumn{
     readonly width?: number
     readonly align?: ColumnAlign
     readonly formatter?: (value: any) => string
+    readonly onLink?: (value: any) => void
 }
 
 export interface IGridConfig<T>{

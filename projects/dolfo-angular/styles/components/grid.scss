@@ -94,8 +94,6 @@
         }
     
         tbody tr{ 
-            @include pointer;
-    
             &:hover td{
                 background-color: color.adjust($lightGrey, $lightness: 15%)
             }
