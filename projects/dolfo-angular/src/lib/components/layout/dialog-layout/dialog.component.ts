@@ -76,7 +76,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
         }
     }
 
-    protected submit = (): Observable<unknown> => of(null)
+    protected submit = (_formValue: any): Observable<unknown> => of(null)
 
     public getIcon = (): DialogIcon => {
         if(this.type === "info")
