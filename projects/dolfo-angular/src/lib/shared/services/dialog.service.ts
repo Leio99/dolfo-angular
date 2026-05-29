@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core"
-import { BehaviorSubject, filter } from "rxjs"
+import { BehaviorSubject, delay, filter } from "rxjs"
 import { DialogComponentInput, DialogOutput, IDialogInput } from "../interfaces"
 import { TranslateService } from "./translate.service"
 
@@ -27,7 +27,8 @@ export class DialogService{
         }))
 
         return this.getLastWaiter().pipe(
-            filter(d => d != null)
+            filter(d => d != null),
+            delay(0)
         )
     }
 
