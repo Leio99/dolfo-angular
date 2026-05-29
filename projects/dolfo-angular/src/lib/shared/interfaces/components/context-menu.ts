@@ -5,7 +5,7 @@ export interface ContextMenuItem{
     readonly label: string
     readonly onClick: () => void
     readonly disabled?: boolean
-    readonly icon?: IconName
+    readonly icon?: IconName | string
     readonly className?: string
 }
 

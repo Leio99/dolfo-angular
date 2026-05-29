@@ -8,5 +8,5 @@ import { IconName } from "../../shared/interfaces"
     changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class IconComponent {
-    @Input({ required: true }) name: IconName
+    @Input({ required: true }) name: IconName | string
 }

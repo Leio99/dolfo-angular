@@ -1,5 +1,5 @@
 import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
-import { DialogActionType, DialogIcon, IconName } from "../../../shared/interfaces"
+import { DialogActionType, DialogIcon } from "../../../shared/interfaces"
 import { DialogService } from "../../../shared/services"
 
 @Component({
@@ -37,5 +37,5 @@ export class DialogHeaderComponent implements OnInit{
         this.dialogService.close()
     }
 
-    public getIcon = () => this.icon.icon as IconName
+    public getIcon = () => this.icon.icon
 }
