@@ -1,10 +1,8 @@
-import { Injectable } from "@angular/core"
+import { Service } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IContextMenu } from "../interfaces"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class ContextMenuService {
     private contextMenu$ = new BehaviorSubject<IContextMenu>(null)
 

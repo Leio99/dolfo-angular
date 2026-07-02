@@ -1,16 +1,13 @@
-import { Injectable } from "@angular/core"
+import { inject, Service } from "@angular/core"
 import { BehaviorSubject, delay, filter } from "rxjs"
 import { DialogComponentInput, DialogOutput, IDialogInput } from "../interfaces"
 import { TranslateService } from "./translate.service"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class DialogService{
     private dialog$ = new BehaviorSubject<(IDialogInput & { _dialogId: number })[]>([])
     private waiters: BehaviorSubject<DialogOutput>[] = []
-
-    constructor(private ts: TranslateService){}
+    private ts = inject(TranslateService)
 
     private getLastWaiter = () => this.waiters[this.waiters.length - 1]
 

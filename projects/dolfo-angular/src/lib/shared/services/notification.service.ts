@@ -1,10 +1,8 @@
-import { Injectable } from "@angular/core"
+import { Service } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { INotificationInput } from "../interfaces"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class NotificationService {
     private notification$ = new BehaviorSubject<INotificationInput>(null)
     private history$ = new BehaviorSubject<Array<INotificationInput & { date: Date }>>([])

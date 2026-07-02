@@ -1,12 +1,10 @@
-import { Injectable, signal } from "@angular/core"
+import { Service, signal } from "@angular/core"
 import { BehaviorSubject, filter, fromEvent, tap, zip } from "rxjs"
 // ! Importante che venga importato con percorso preciso
 import { Subscriptable } from "../classes/subscriptable"
 import { IStore } from "../interfaces"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class StoreService extends Subscriptable {
     private appInitialized = signal(false)
 

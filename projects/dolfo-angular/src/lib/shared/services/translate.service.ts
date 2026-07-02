@@ -1,25 +1,24 @@
 import { formatDate } from "@angular/common"
 import { HttpClient } from "@angular/common/http"
-import { inject, Inject, Injectable } from "@angular/core"
+import { inject, Service } from "@angular/core"
 import { BehaviorSubject, distinctUntilChanged, tap } from "rxjs"
-import { ILanguage, ILanguageToken, LANGUAGE_TOKEN, TRANSLATE_STORAGE_KEY } from "../interfaces"
+import { ILanguage, LANGUAGE_TOKEN, TRANSLATE_STORAGE_KEY } from "../interfaces"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class TranslateService {
     private lang$ = new BehaviorSubject<ILanguage>(null)
     private langContent: Record<string, string>
     private langs: ILanguage[]
     private httpClient = inject(HttpClient)
+    private langConfig = inject(LANGUAGE_TOKEN)
 
-    constructor(@Inject(LANGUAGE_TOKEN) langConfig: ILanguageToken) {
+    constructor() {
         if(!localStorage.getItem(TRANSLATE_STORAGE_KEY))
-            localStorage.setItem(TRANSLATE_STORAGE_KEY, langConfig.defaultLanguage)
+            localStorage.setItem(TRANSLATE_STORAGE_KEY, this.langConfig.defaultLanguage)
         
-        const { langs } = langConfig,
+        const { langs } = this.langConfig,
         lang = localStorage.getItem(TRANSLATE_STORAGE_KEY) as string,
-        foundLang = langConfig.langs.find(l => l.name === lang)
+        foundLang = this.langConfig.langs.find(l => l.name === lang)
 
         this.langs = langs
 

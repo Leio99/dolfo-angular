@@ -1,10 +1,8 @@
-import { Injectable } from "@angular/core"
+import { Service } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { ITooltip } from "../interfaces"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class TooltipService {
     private tooltip$ = new BehaviorSubject<ITooltip>(null)
 

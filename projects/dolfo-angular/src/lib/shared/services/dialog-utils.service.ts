@@ -1,14 +1,13 @@
-import { Injectable } from "@angular/core"
+import { inject, Service } from "@angular/core"
 import { catchError, delay, filter, mergeMap, Observable, ObservableInput, of, tap, throwError } from "rxjs"
 import { DialogActionType, DialogComponentInput, IDialogInput } from "../interfaces"
 import { DialogService } from "./dialog.service"
 import { TranslateService } from "./translate.service"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class DialogUtilsService{
-    constructor(private dialogService: DialogService, private translateService: TranslateService){}
+    private dialogService = inject(DialogService)
+    private translateService = inject(TranslateService)
 
     public showLoading$ = <T, T2>(obs: (res: T2) => Observable<T>) => mergeMap<T2, ObservableInput<T>>(res => of(res).pipe(
         delay(0),

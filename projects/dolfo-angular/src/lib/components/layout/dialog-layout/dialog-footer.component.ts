@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from "@angular/core"
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Injector, Input, OnInit, QueryList, TemplateRef, ViewChild, ViewChildren } from "@angular/core"
 import { DialogFooterButton } from "../../../shared/interfaces"
 import { ButtonComponent } from "../button.component"
 
@@ -6,7 +6,7 @@ import { ButtonComponent } from "../button.component"
     selector: "dolfo-dialog-footer",
     template: `<ng-template>
         @for(btn of buttons; track btn.label){
-            <dolfo-button (onClick)="btn.onClick()" [color]="btn.color" [disabled]="btn.disabled" [loading]="btn.loading">
+            <dolfo-button (onClick)="btn.onClick(null)" [color]="btn.color" [disabled]="btn.disabled" [loading]="btn.loading">
                 @if(btn.icon && !btn.loading){
                     <dolfo-icon [name]="btn.icon"></dolfo-icon>
                 }
@@ -23,12 +23,16 @@ export class DialogFooterComponent implements OnInit, AfterViewChecked{
     @Input({ required: true }) buttons: DialogFooterButton[]
 
     private focused = false
+    private cdr = inject(ChangeDetectorRef)
+    private injector = inject(Injector)
 
-    constructor(private cdr: ChangeDetectorRef) {}
-
-    ngOnInit() {
+    async ngOnInit() {
         this.cdr.detectChanges()
         setTimeout(() => this.cdr.markForCheck())
+        const { DialogComponent } = await import("./dialog.component"),
+        parent = this.injector.get(DialogComponent, null)
+
+        console.log("PArent", parent)
     }
 
     ngAfterViewChecked(): void {

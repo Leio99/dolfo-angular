@@ -52,5 +52,5 @@ export type DialogFooterButton = {
     icon?: IconName
     disabled?: boolean
     loading?: boolean
-    onClick: () => void
+    onClick: (dialog: any) => void
 }

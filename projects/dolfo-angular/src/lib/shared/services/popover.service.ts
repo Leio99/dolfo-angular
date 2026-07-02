@@ -1,10 +1,8 @@
-import { Injectable } from "@angular/core"
+import { Service } from "@angular/core"
 import { BehaviorSubject } from "rxjs"
 import { IPopover } from "../interfaces"
 
-@Injectable({
-    providedIn: "root"
-})
+@Service()
 export class PopoverService {
     private popover$ = new BehaviorSubject<IPopover>(null)
 
