@@ -13,7 +13,7 @@ import { DialogService } from "../../../shared/services"
         </h5>
         @if(showCloseX){
             <dolfo-button (click)="close()" color="secondary" [dolfoTooltip]="'dialog.close' | translate">
-                <i class="icon-cross"></i>
+                <dolfo-icon name="cross"></dolfo-icon>
             </dolfo-button>
         }
     </ng-template>`,
