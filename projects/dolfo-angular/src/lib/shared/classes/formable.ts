@@ -1,5 +1,5 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Directive, inject, OnDestroy, QueryList, ViewChild, ViewChildren } from "@angular/core"
-import { FormGroupDirective } from "@angular/forms"
+import { FormArray, FormGroup, FormGroupDirective } from "@angular/forms"
 import { BehaviorSubject, catchError, distinctUntilChanged, mergeMap, Observable, of, Subscription, tap } from "rxjs"
 import { BaseFormInput } from "../../components/form/base-form-input"
 import { NotificationService, TranslateService } from "../services"
@@ -32,19 +32,7 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
         }))
 
         this.subForm = this.formRef.ngSubmit.pipe(
-            tap(() => {
-                let focused = false
-                
-                Object.entries(this.formRef.form.controls).forEach(([key, control]) => {
-                    control.markAsTouched()
-                    control.updateValueAndValidity()
-
-                    if(control.invalid && !focused){
-                        this.inputs.toArray().find(i => i.formControlName === key).container?.focus()
-                        focused = true
-                    }
-                })
-            }),
+            tap(() => this.findInForm(this.formRef.form)),
             mergeMap(() => {
                 if(!this.formRef.invalid && !this.loading$.getValue()){
                     this.loading$.next(true)
@@ -72,6 +60,39 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
             this.subForm = null
         }else if(this.formRef && !this.subForm)
             this.ngAfterViewInit()
+    }
+
+    private findInForm = (formGroup: FormGroup, index?: number) => {
+        for(const [key, control] of Object.entries(formGroup.controls)){
+            control.markAsTouched()
+            control.updateValueAndValidity()
+
+            if(control.invalid){
+                const arr = formGroup.get(key)
+
+                if(arr instanceof FormArray){
+                    let index = 0
+
+                    for(const item of arr.controls){
+                        if(this.findInForm(item as FormGroup, index))
+                            return true
+
+                        index++
+                    }
+                }else{
+                    const inputs = this.inputs.toArray().filter(i => i.formControlName === key)
+
+                    if(inputs.length === 1)
+                        inputs[0].container?.focus()
+                    else if(index != null)
+                        inputs[index].container?.focus()
+
+                    return true
+                }
+            }
+        }
+
+        return false
     }
 
     protected manualSubmit = () => this.formRef.ngSubmit.emit()
