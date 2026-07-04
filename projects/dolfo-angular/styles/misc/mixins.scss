@@ -107,14 +107,23 @@
 
 @mixin pseudo-btn($prefix: ""){
     @each $key, $color in $colors{
-        &.#{$prefix + $key}{
+        $newColor: color.adjust($color, $lightness: -5%);
+
+        &.#{$prefix + $key}:not(.text){
             background-color: $color;
             color: getButtonTextColor($color);
 
             &:not([disabled]):hover{
-                $newColor: color.adjust($color, $lightness: -5%);
                 background-color: $newColor;
-                color: getButtonTextColor($newColor);
+                color: getButtonTextColor($newColor)
+            }
+        }
+
+        &.#{$prefix + $key}.text{
+            color: $color;
+
+            &:not([disabled]):hover{
+                color: $newColor
             }
         }
     }

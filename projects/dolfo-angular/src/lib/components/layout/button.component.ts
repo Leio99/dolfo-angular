@@ -4,7 +4,7 @@ import { OnBlur, OnClick, OnFocus } from "../../shared/interfaces/events"
 
 @Component({
     selector: "dolfo-button",
-    template: `<button #btn [type]="type" [disabled]="disabled || loading" (click)="doClick($event)" [class]="'color-' + (color || 'primary')" (focus)="onFocus.emit($event)" (blur)="onFocus.emit($event)" [class.size-sm]="size === 'small'" [class.size-lg]="size === 'large'">
+    template: `<button #btn [type]="type" [disabled]="disabled || loading" (click)="doClick($event)" [class]="'color-' + (color || 'primary')" (focus)="onFocus.emit($event)" (blur)="onFocus.emit($event)" [class.size-sm]="size === 'small'" [class.size-lg]="size === 'large'" [class.text]="textButton">
         @if(loading){
             <dolfo-icon name="spinner8"></dolfo-icon>
         }
@@ -20,6 +20,7 @@ export class ButtonComponent implements OnClick, OnBlur, OnFocus{
     @Input() color: ButtonColor
     @Input() loading = false
     @Input() size: ButtonSize
+    @Input({ transform: booleanAttribute }) textButton = false
 
     @Output() onClick = new EventEmitter<MouseEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()

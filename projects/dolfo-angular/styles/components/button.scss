@@ -8,18 +8,25 @@ button{
     border-radius: 3px;
     border: 0;
 
-    &:not(.size-sm):not(.size-lg){
-        padding: 0.3rem 0.7rem
+    &:not(.text){
+        &:not(.size-sm):not(.size-lg){
+            padding: 0.3rem 0.7rem
+        }
+
+        &.size-sm{
+            font-size: small;
+            padding: 0.3rem 0.5rem
+        }
+
+        &.size-lg{
+            font-size: large;
+            padding: 0.3rem 1rem
+        }
     }
 
-    &.size-sm{
-        font-size: small;
-        padding: 0.3rem 0.5rem
-    }
-
-    &.size-lg{
-        font-size: large;
-        padding: 0.3rem 1rem
+    &.text{
+        background-color: transparent;
+        padding: 0
     }
 
     &[disabled]{
@@ -27,12 +34,15 @@ button{
     }
 
     @each $key, $color in $colors{
-        &.color-#{$key}{
-            &:not([disabled]):focus{
-                $newColor: color.adjust($color, $lightness: -10%);
-                background-color: $newColor;
-                color: getButtonTextColor($newColor)
-            }
+        $newColor: color.adjust($color, $lightness: -10%);
+
+        &.color-#{$key}:not(.text):not([disabled]):focus{
+            background-color: $newColor;
+            color: getButtonTextColor($newColor)
+        }
+
+        &.color-#{$key}.text:not([disabled]):focus{
+            color: $newColor
         }
     }
 }
