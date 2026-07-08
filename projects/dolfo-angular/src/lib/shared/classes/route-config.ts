@@ -1,5 +1,5 @@
 import { ProviderToken, Type } from "@angular/core"
-import { CanActivateFn, Route } from "@angular/router"
+import { CanActivateFn, CanDeactivateFn, Route } from "@angular/router"
 import { Observable } from "rxjs"
 import { RouteCheckService } from "../services"
 
@@ -13,6 +13,7 @@ export class RouteConfig{
     private pathMatch: "full" | "prefix" = "full"
     private title: (() => Observable<string> | string) | string
     private canActivate: Array<CanActivateFn | ProviderToken<any> | string> = []
+    private canDeactivate: Array<CanDeactivateFn<any> | ProviderToken<any>> = []
 
     constructor(private path: string, withRouteCheck = true){
         if(withRouteCheck)
@@ -34,6 +35,15 @@ export class RouteConfig{
         return this
     }
 
+    public addCanDeactivate = (guard: CanDeactivateFn<any> | ProviderToken<any> | Array<CanDeactivateFn<any> | ProviderToken<any>>) => {
+        if(Array.isArray(guard))
+            this.canDeactivate.push(...guard)
+        else
+            this.canDeactivate.push(guard)
+        
+        return this
+    }
+
     public addGuard = (guard: CanActivateFn | ProviderToken<any> | string | Array<CanActivateFn | ProviderToken<any> | string>) => {
         if(Array.isArray(guard))
             this.canActivate.push(...guard)
@@ -49,6 +59,7 @@ export class RouteConfig{
         pathMatch: this.pathMatch,
         title: this.title,
         redirectTo: this.redirectTo,
-        canActivate: this.canActivate
+        canActivate: this.canActivate,
+        canDeactivate: this.canDeactivate
     })
 }
