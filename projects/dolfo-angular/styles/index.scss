@@ -1,10 +1,10 @@
 @each $key, $color in $colors{
     .fg-#{$key}{
-        color: $color
+        color: $color !important
     }
     
     .bg-#{$key}{
-        background-color: $color
+        background-color: $color !important
     }
 }
 
