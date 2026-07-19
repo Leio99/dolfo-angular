@@ -46,5 +46,5 @@ export class DialogService{
         this.waiters = this.waiters.slice(0, this.waiters.length - 1)
     }
 
-    public action = (action: DialogOutput) => this.getLastWaiter().next(action)
+    public action = (action: DialogOutput) => this.getLastWaiter()?.next(action)
 }

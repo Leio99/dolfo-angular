@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
+import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
 import { DialogActionType, DialogIcon } from "../../../shared/interfaces"
 import { DialogService } from "../../../shared/services"
 
@@ -25,8 +25,8 @@ export class DialogHeaderComponent implements OnInit{
     @Input({ required: true }) title: string
     @Input() icon: DialogIcon
     @Input({ transform: booleanAttribute }) showCloseX = true
-
-    constructor(private cdr: ChangeDetectorRef, private dialogService: DialogService) {}
+    private cdr = inject(ChangeDetectorRef)
+    private dialogService = inject(DialogService)
 
     ngOnInit() {
         this.cdr.detectChanges()

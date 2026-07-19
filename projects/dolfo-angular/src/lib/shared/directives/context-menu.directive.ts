@@ -1,4 +1,4 @@
-import { booleanAttribute, Directive, ElementRef, Input, OnInit } from "@angular/core"
+import { booleanAttribute, Directive, ElementRef, inject, Input, OnInit } from "@angular/core"
 import { fromEvent } from "rxjs"
 import { Subscriptable } from "../classes"
 import { ContextMenuItem } from "../interfaces"
@@ -13,10 +13,8 @@ export class ContextMenuDirective extends Subscriptable implements OnInit{
     @Input({ transform: booleanAttribute }) openOnClick: boolean
     @Input({ transform: booleanAttribute }) useElRef: boolean
     @Input() position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" = "bottom-left"
-
-    constructor(private contextMenuService: ContextMenuService, private elRef: ElementRef<HTMLElement>) {
-        super()
-    }
+    private contextMenuService = inject(ContextMenuService)
+    private elRef = inject(ElementRef)
 
     ngOnInit(){
         this.addSubscription(fromEvent<MouseEvent>(this.elRef.nativeElement, this.openOnClick ? "click" : "contextmenu").subscribe(e => {

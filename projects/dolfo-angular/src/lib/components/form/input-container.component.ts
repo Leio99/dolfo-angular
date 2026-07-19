@@ -1,5 +1,5 @@
 import { DecimalPipe } from "@angular/common"
-import { Component, ElementRef } from "@angular/core"
+import { Component, ElementRef, inject } from "@angular/core"
 import { ValidationErrors } from "@angular/forms"
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from "rxjs"
 import { isDeepEqual } from "../../shared/interfaces"
@@ -56,8 +56,10 @@ export class InputContainerComponent{
             return null
         })
     )
-
-    constructor(public input: BaseFormInput<unknown>, private elRef: ElementRef<HTMLDivElement>, private translateService: TranslateService, private cp: DecimalPipe){}
+    public input = inject(BaseFormInput)
+    private elRef = inject(ElementRef)
+    private translateService = inject(TranslateService)
+    private cp = inject(DecimalPipe)
 
     public focus = () => {
         const input = this.elRef.nativeElement.querySelector("input")

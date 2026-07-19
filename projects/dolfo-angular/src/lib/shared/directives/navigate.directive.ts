@@ -13,23 +13,26 @@ export class NavigateDirective extends Subscriptable{
     @Input({ required: true, alias: "dolfoNavigate" }) url: string
     private isLink: boolean
     private publicUrl = inject(APP_BASE_HREF)
+    private storeService = inject(StoreService)
+    private router = inject(Router)
+    private elementRef = inject(ElementRef)
 
-    constructor(storeService: StoreService, router: Router, private elementRef: ElementRef<HTMLElement>) {
+    constructor() {
         super()
 
-        this.isLink = elementRef.nativeElement.tagName.toLowerCase() === "a"
+        this.isLink = this.elementRef.nativeElement.tagName.toLowerCase() === "a"
 
-        this.addSubscription(fromEvent<MouseEvent>(elementRef.nativeElement, "click").subscribe(e => {
+        this.addSubscription(fromEvent<MouseEvent>(this.elementRef.nativeElement, "click").subscribe(e => {
             if(this.isLink)
                 e.preventDefault()
             
-            if(storeService.isPressingCtrl())
+            if(this.storeService.isPressingCtrl())
                 this.openBlank()
             else
-                router.navigateByUrl(this.url)
+                this.router.navigateByUrl(this.url)
         }))
 
-        this.addSubscription(fromEvent<MouseEvent>(elementRef.nativeElement, "mousedown").pipe(
+        this.addSubscription(fromEvent<MouseEvent>(this.elementRef.nativeElement, "mousedown").pipe(
             filter(e => e.button === 1)
         ).subscribe(e => {
             if(this.isLink)

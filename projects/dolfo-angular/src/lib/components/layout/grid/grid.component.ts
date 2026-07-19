@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core"
+import { Component, inject, Input } from "@angular/core"
 import { DomSanitizer } from "@angular/platform-browser"
 import { ColumnDataType, GridColumn, GridConfig } from "../../../shared/interfaces"
 import { TranslateService } from "../../../shared/services"
@@ -10,8 +10,8 @@ import { TranslateService } from "../../../shared/services"
 })
 export class GridComponent<T>{
 	@Input({ required: true }) config: GridConfig<T>
-
-	constructor(private translateService: TranslateService, private sanitizer: DomSanitizer){}
+    private translateService = inject(TranslateService)
+    private sanitizer = inject(DomSanitizer)
 
 	public resolveField = (item: T, { field, formatter, dataType, onLink }: GridColumn) => {
         let value = field

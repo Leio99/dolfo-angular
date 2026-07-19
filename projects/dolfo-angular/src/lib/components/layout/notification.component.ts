@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, OnInit } from "@angular/core"
+import { ChangeDetectionStrategy, Component, inject, Input, OnInit } from "@angular/core"
 import { INotificationInput, NotificationAction, NotificationType } from "../../shared/interfaces"
 import { NotificationService, TranslateService } from "../../shared/services"
 
@@ -35,8 +35,8 @@ export class NotificationComponent implements OnInit, Required<INotificationInpu
     @Input() action: NotificationAction
 
     private timeout: any
-
-    constructor(private ns: NotificationService, private ts: TranslateService){}
+    private ns = inject(NotificationService)
+    private ts = inject(TranslateService)
 
     ngOnInit(){
         this.mouseLeave()

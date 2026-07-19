@@ -30,15 +30,13 @@ export class PopoverComponent extends Subscriptable implements OnInit, AfterView
 
     private destroyFn = inject(POPOVER_DESTROY_TOKEN)
     private checkCount = 0
+    private cdr = inject(ChangeDetectorRef)
+    private sanitizer = inject(DomSanitizer)
 
     public currentDirection$ = new BehaviorSubject<TooltipDirection>(null)
     public completed$ = new BehaviorSubject(false)
     public readonly x$ = new BehaviorSubject(0)
     public readonly y$ = new BehaviorSubject(0)
-
-    constructor(private cdr: ChangeDetectorRef, private sanitizer: DomSanitizer) {
-        super()
-    }
 
     ngOnInit() {
         this.currentDirection$.next(this.direction)

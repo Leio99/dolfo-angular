@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, TemplateRef, ViewChild } from "@angular/core"
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, OnInit, TemplateRef, ViewChild } from "@angular/core"
 
 @Component({
     selector: "dolfo-dialog-content",
@@ -8,8 +8,7 @@ import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnInit, Template
 })
 export class DialogContentComponent implements OnInit{
     @ViewChild(TemplateRef) template: TemplateRef<unknown>
-
-    constructor(private cdr: ChangeDetectorRef) {}
+    private cdr = inject(ChangeDetectorRef)
 
     ngOnInit() {
         this.cdr.detectChanges()

@@ -1,4 +1,4 @@
-import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, Input, OnChanges, Output, signal, SimpleChanges, ViewChild } from "@angular/core"
+import { AfterViewInit, booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, ElementRef, EventEmitter, forwardRef, inject, Input, OnChanges, Output, signal, SimpleChanges, ViewChild } from "@angular/core"
 import { NG_VALIDATORS, NG_VALUE_ACCESSOR } from "@angular/forms"
 import { filter, fromEvent, map } from "rxjs"
 import { ComboInput, ComboOption, isDeepEqual } from "../../shared/interfaces"
@@ -45,11 +45,13 @@ export class ComboboxComponent extends BaseFormInput<any | any[]> implements Aft
 	@Output() onFocus = new EventEmitter<FocusEvent>()
 	@Output() onBlur = new EventEmitter<FocusEvent>()
 
+    private cdr = inject(ChangeDetectorRef)
+
 	public opened = signal(false)
     public currentFocus = signal<number>(null)
     public comboLabel = signal("")
 
-	constructor(private cdr: ChangeDetectorRef){
+	constructor(){
 		super()
 
 		this.addSubscription(fromEvent(window, "click").pipe(

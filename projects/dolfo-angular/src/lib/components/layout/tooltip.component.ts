@@ -24,15 +24,12 @@ export class TooltipComponent extends Subscriptable implements OnInit, AfterView
     
     private destroyFn = inject(TOOLTIP_DESTROY_TOKEN)
     private checkCount = 0
+    private cdr = inject(ChangeDetectorRef)
 
     public currentDirection$ = new BehaviorSubject<TooltipDirection>(null)
     public completed$ = new BehaviorSubject(false)
     public readonly x$ = new BehaviorSubject(0)
     public readonly y$ = new BehaviorSubject(0)
-
-    constructor(private cdr: ChangeDetectorRef) {
-        super()
-    }
 
     ngOnInit() {
         this.currentDirection$.next(this.direction)

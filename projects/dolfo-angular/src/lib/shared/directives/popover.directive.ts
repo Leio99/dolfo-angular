@@ -1,4 +1,4 @@
-import { Directive, ElementRef, Input, TemplateRef } from "@angular/core"
+import { Directive, ElementRef, inject, Input, TemplateRef } from "@angular/core"
 import { filter, fromEvent } from "rxjs"
 import { Subscriptable } from "../classes"
 import { TooltipDirection } from "../interfaces"
@@ -12,10 +12,8 @@ export class PopoverDirective extends Subscriptable{
     @Input({ required: true, alias: "dolfoPopover" }) content: string | TemplateRef<any>
     @Input({ alias: "dolfoPopoverContext" }) context: any
     @Input() direction: TooltipDirection = "top"
-
-    constructor(private el: ElementRef<HTMLElement>, private ps: PopoverService) {
-        super()
-    }
+    private el = inject(ElementRef)
+    private ps = inject(PopoverService)
 
     ngOnInit(){
         this.addSubscription(fromEvent(this.el.nativeElement, "mousedown").pipe(
