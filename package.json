@@ -7,9 +7,9 @@
         "snapshot": "npm run build-library && rename dist dolfo-angular && move dolfo-angular C:\\Users\\leonardo.grandolfo\\Desktop\\Progetti\\itinerary\\frontend\\node_modules\\"
     },
     "devDependencies": {
-        "@angular-devkit/build-angular": "^22.0.5",
-        "@angular/build": "^22.0.5",
-        "@angular/cli": "^22.0.5",
+        "@angular-devkit/build-angular": "^22.0.7",
+        "@angular/build": "^22.0.7",
+        "@angular/cli": "^22.0.7",
         "ng-packagr": "^22.0.1"
     }
 }
