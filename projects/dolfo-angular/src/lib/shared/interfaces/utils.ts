@@ -1,4 +1,4 @@
-import { FormControl, ValidationErrors, ValidatorFn } from "@angular/forms"
+import { AbstractControl, FormControl, ValidationErrors, ValidatorFn } from "@angular/forms"
 
 export const isDeepEqual = (objA: any, objB: any, map = new WeakMap()) => {
     if (Object.is(objA, objB))
@@ -36,6 +36,15 @@ export const isDeepEqual = (objA: any, objB: any, map = new WeakMap()) => {
 export const passwordValidator = ((control: FormControl): ValidationErrors => {
     if(control.value?.match(/^(.{0,7}|[^0-9]*|[^A-Z]*|[^a-z]*|[a-zA-Z0-9]*)$/))
         return { password: true }
+
+    return null
+}) as ValidatorFn
+
+export const samePasswordValidator = (ctrName: string): ValidatorFn => ((control: AbstractControl): ValidationErrors => {
+    const otherControl = control.parent?.get(ctrName)
+
+    if(otherControl?.value !== control?.value)
+        return { differentPasswords: true }
 
     return null
 }) as ValidatorFn

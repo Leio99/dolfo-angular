@@ -1,6 +1,6 @@
 import { AfterViewChecked, AfterViewInit, ChangeDetectorRef, Directive, inject, OnDestroy, QueryList, ViewChild, ViewChildren } from "@angular/core"
 import { FormArray, FormGroup, FormGroupDirective } from "@angular/forms"
-import { BehaviorSubject, catchError, distinctUntilChanged, mergeMap, Observable, of, Subscription, tap } from "rxjs"
+import { BehaviorSubject, catchError, distinctUntilChanged, filter, mergeMap, Observable, of, Subscription, tap } from "rxjs"
 import { BaseFormInput } from "../../components/form/base-form-input"
 import { NotificationService, TranslateService } from "../services"
 import { Subscriptable } from "./subscriptable"
@@ -96,4 +96,22 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
     }
 
     protected manualSubmit = () => this.formRef.ngSubmit.emit()
+
+    protected registerPasswordChanges = (passwordControlName: string, confirmPasswordControlName: string) => {
+        this.addSubscription(this.formRef.form.get(passwordControlName).valueChanges.pipe(
+            distinctUntilChanged(),
+            filter(() => this.formRef.form.get(passwordControlName).touched)
+        ).subscribe(() => {
+            this.formRef.form.get(confirmPasswordControlName).updateValueAndValidity()
+            this.formRef.form.get(confirmPasswordControlName).markAsTouched()
+        }))
+
+        this.addSubscription(this.formRef.form.get(confirmPasswordControlName).valueChanges.pipe(
+            distinctUntilChanged(),
+            filter(() => this.formRef.form.get(confirmPasswordControlName).touched)
+        ).subscribe(() => {
+            this.formRef.form.get(passwordControlName).updateValueAndValidity()
+            this.formRef.form.get(passwordControlName).markAsTouched()
+        }))
+    }
 }
