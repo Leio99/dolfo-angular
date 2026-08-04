@@ -1,4 +1,4 @@
-import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, Input, OnInit, TemplateRef, ViewChild } from "@angular/core"
+import { booleanAttribute, ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output, TemplateRef, ViewChild } from "@angular/core"
 import { DialogActionType, DialogIcon } from "../../../shared/interfaces"
 import { DialogService } from "../../../shared/services"
 
@@ -25,6 +25,7 @@ export class DialogHeaderComponent implements OnInit{
     @Input({ required: true }) title: string
     @Input() icon: DialogIcon
     @Input({ transform: booleanAttribute }) showCloseX = true
+    @Output() onCancel = new EventEmitter()
     private cdr = inject(ChangeDetectorRef)
     private dialogService = inject(DialogService)
 
@@ -33,8 +34,12 @@ export class DialogHeaderComponent implements OnInit{
     }
 
     public close = () => {
-        this.dialogService.action({ type: DialogActionType.CANCEL, data: null })
-        this.dialogService.close()
+        if(this.onCancel.observed)
+            this.onCancel.emit()
+        else{
+            this.dialogService.action({ type: DialogActionType.CANCEL, data: null })
+            this.dialogService.close()
+        }
     }
 
     public getIcon = () => this.icon.icon
