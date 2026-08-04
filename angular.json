@@ -16,7 +16,7 @@
             "prefix": "dolfo",
             "architect": {
                 "build": {
-                    "builder": "@angular-devkit/build-angular:ng-packagr",
+                    "builder": "@angular/build:ng-packagr",
                     "options": {
                         "project": "projects/dolfo-angular/ng-package.json"
                     },

@@ -25,7 +25,6 @@
     "module": "ESNext",
     "lib": ["ES2022", "dom"],
     "allowJs": true,
-    "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
     "jsx": "react",
