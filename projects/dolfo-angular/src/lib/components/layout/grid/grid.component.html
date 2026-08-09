@@ -14,6 +14,22 @@
         @let colSpan = columns.length + (showActions ? 1 : 0) + (selection ? 1 : 0);
     
         <thead>
+            @if(config.hasToolbar){
+                <tr class="dolfo-grid-toolbar">
+                    <th [colSpan]="colSpan">
+                        @for(btn of config.getToolbarButtons(); track btn.label){
+                            <dolfo-button color="white" (onClick)="btn.onClick()" [disabled]="isToolbarBtnDisabled(btn.disabled)">
+                                @if(btn.icon){
+                                    <dolfo-icon [name]="btn.icon"></dolfo-icon>
+                                }
+
+                                {{ btn.label }}
+                            </dolfo-button>
+                        }
+                    </th>
+                </tr>
+            }
+
             <tr>
                 @if(selection){
                     <th [style]="{ width: 0 }">

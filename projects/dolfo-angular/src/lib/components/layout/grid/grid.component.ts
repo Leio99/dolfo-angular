@@ -51,4 +51,6 @@ export class GridComponent<T>{
 				col.onLink(colValue)
 		}
 	}
+
+    public isToolbarBtnDisabled = (disabled: boolean | (() => boolean)) => typeof disabled === "boolean" ? disabled : disabled()
 }

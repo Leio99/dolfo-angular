@@ -1,4 +1,4 @@
-import { BehaviorSubject, map, Observable } from "rxjs"
+import { BehaviorSubject, map, Observable, Subscription } from "rxjs"
 import { ButtonColor } from "./button"
 import { ContextMenuItem } from "./context-menu"
 
@@ -15,6 +15,13 @@ export interface GridAction{
     readonly title?: string
     readonly disabled?: boolean
     readonly color?: ButtonColor
+    readonly onClick: () => void
+}
+
+export interface GridToolbarButton{
+    readonly label: string
+    readonly disabled?: boolean | (() => boolean)
+    readonly icon?: string
     readonly onClick: () => void
 }
 
@@ -36,6 +43,9 @@ export interface IGridConfig<T>{
         readonly showSelectAll?: boolean
         readonly defaultSelected?: (item: T) => boolean
     }
+    readonly toolbar?: {
+        readonly buttons?: GridToolbarButton[]
+    }
     readonly events?: {
         onRowClick?: (item: T) => void
         onSelectionChange?: (item: T[]) => void
@@ -50,22 +60,29 @@ export class GridConfig<T>{
     private loading$ = new BehaviorSubject(false)
     private selectedItems: T[]
     private actions$ = new BehaviorSubject<IGridConfig<T>["actions"]>(null)
+    private toolbar: IGridConfig<T>["toolbar"]
+    private prevSub: Subscription
 
     constructor(private config: IGridConfig<T>){
         this.refreshGrid()
         this.actions$.next(config.actions)
+
+        if(config.toolbar)
+            this.toolbar = config.toolbar
     }
 
     public refreshGrid = () => {
         this.selectedItems = []
 
+        this.prevSub?.unsubscribe()
+
         if(Array.isArray(this.config.items))
             this.items$.next(this.config.items)
         else{
-            this.toggleLoading()
+            this.setLoading(true)
 
-            this.config.items.subscribe(it => {
-                this.toggleLoading()
+            this.prevSub = this.config.items.subscribe(it => {
+                this.setLoading(false)
                 this.items$.next(it)
                 
                 if(this.getSelectionConfig()?.defaultSelected)
@@ -96,7 +113,7 @@ export class GridConfig<T>{
 
     public isLoading$ = () => this.loading$.asObservable()
 
-    public toggleLoading = () => this.loading$.next(!this.loading$.getValue())
+    public setLoading = (v: boolean) => this.loading$.next(v)
 
     public getSelectedItems = () => this.items$.getValue().filter(it => this.selectedItems.some(d => this.getUniqueId(d) === this.getUniqueId(it)))
 
@@ -131,4 +148,14 @@ export class GridConfig<T>{
     public get hasActions(){
         return !!this.actions$.getValue()
     }
+
+    public get hasToolbar(){
+        return !!this.toolbar
+    }
+
+    public getToolbarButtons(){
+        return this.toolbar.buttons
+    }
+
+    public setToolbar = (toolbar: IGridConfig<T>["toolbar"]) => this.toolbar = toolbar
 }

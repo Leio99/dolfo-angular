@@ -75,11 +75,23 @@
         thead tr{
             background-color: $white;
             
+            &:not(.dolfo-grid-tolbar) th{
+                @include text-center;
+                font-weight: 700
+            }
+
             th{
                 @include relative;
-                text-align: center;
-                border-top: $border;
-                font-weight: 700
+                border-top: $border
+            }
+
+            &.dolfo-grid-toolbar th{
+                @include text-left;
+
+                button{
+                    padding: 0.1rem 0.3rem;
+                    font-weight: normal
+                }
             }
     
             &:first-child{
