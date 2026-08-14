@@ -15,7 +15,7 @@ export class NavigateDirective extends Subscriptable{
     private publicUrl = inject(APP_BASE_HREF)
     private storeService = inject(StoreService)
     private router = inject(Router)
-    private elementRef = inject(ElementRef)
+    private elementRef = inject(ElementRef<HTMLElement>)
 
     constructor() {
         super()

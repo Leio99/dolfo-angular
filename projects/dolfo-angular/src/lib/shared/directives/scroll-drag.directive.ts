@@ -13,7 +13,7 @@ export class ScrollDragDirective extends Subscriptable {
 	private mouseDownY: number
 	private initialScrollY = 0
 	private diffY = 0
-    private elementRef = inject(ElementRef)
+    private elementRef = inject(ElementRef<HTMLElement>)
 
 	constructor() {
 		super()

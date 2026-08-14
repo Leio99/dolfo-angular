@@ -12,7 +12,7 @@ export class PopoverDirective extends Subscriptable{
     @Input({ required: true, alias: "dolfoPopover" }) content: string | TemplateRef<any>
     @Input({ alias: "dolfoPopoverContext" }) context: any
     @Input() direction: TooltipDirection = "top"
-    private el = inject(ElementRef)
+    private el = inject(ElementRef<HTMLElement>)
     private ps = inject(PopoverService)
 
     ngOnInit(){

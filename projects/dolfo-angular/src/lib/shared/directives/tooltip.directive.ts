@@ -11,7 +11,7 @@ import { TooltipService } from "../services"
 export class TooltipDirective extends Subscriptable implements Omit<ITooltip, "elementRef">{
     @Input({ required: true, alias: "dolfoTooltip" }) content: string
     @Input() direction: TooltipDirection = "top"
-    private el = inject(ElementRef)
+    private el = inject(ElementRef<HTMLElement>)
     private ts = inject(TooltipService)
 
     constructor() {

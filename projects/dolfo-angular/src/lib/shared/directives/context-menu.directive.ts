@@ -14,17 +14,17 @@ export class ContextMenuDirective extends Subscriptable implements OnInit{
     @Input({ transform: booleanAttribute }) useElRef: boolean
     @Input() position?: "top-left" | "top-right" | "bottom-left" | "bottom-right" = "bottom-left"
     private contextMenuService = inject(ContextMenuService)
-    private elRef = inject(ElementRef)
+    private elRef = inject(ElementRef<HTMLElement>)
 
     ngOnInit(){
         this.addSubscription(fromEvent<MouseEvent>(this.elRef.nativeElement, this.openOnClick ? "click" : "contextmenu").subscribe(e => {
             e.preventDefault()
 
-            const [left, top] = this.getElRefPosition()
+            const [left, top] = this.useElRef ? this.getElRefPosition() : [e.clientX, e.clientY]
 
             this.contextMenuService.openContextMenu({
-                x: this.useElRef ? left : e.clientX,
-                y: this.useElRef ? top : e.clientY,
+                x: left,
+                y: top,
                 items: this.contextMenu,
                 ref: this.elRef,
                 position: this.position
@@ -33,22 +33,22 @@ export class ContextMenuDirective extends Subscriptable implements OnInit{
     }
 
     private getElRefPosition = () => {
-        const diff = this.elRef.nativeElement.offsetLeft + this.elRef.nativeElement.offsetWidth
+        const { left, width, top, height } = this.elRef.nativeElement.getBoundingClientRect()
+
+        const diff = left + width
 
         if(this.position.startsWith("bottom-")){
-            const top = this.elRef.nativeElement.offsetTop + this.elRef.nativeElement.offsetHeight
+            const posTop = top + height
 
             if(this.position === "bottom-left")
-                return [this.elRef.nativeElement.offsetLeft, top]
+                return [left, posTop]
 
-            return [diff, top]
+            return [diff, posTop]
         }
-
-        const top = this.elRef.nativeElement.offsetTop
 
         if(this.position === "top-right")
             return [diff, top]
 
-        return [this.elRef.nativeElement.offsetLeft, top]
+        return [left, top]
     }
 }

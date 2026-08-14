@@ -57,7 +57,7 @@ export class InputContainerComponent{
         })
     )
     public input = inject(BaseFormInput)
-    private elRef = inject(ElementRef)
+    private elRef = inject(ElementRef<HTMLElement>)
     private translateService = inject(TranslateService)
     private cp = inject(DecimalPipe)
 
