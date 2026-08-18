@@ -7,10 +7,10 @@ import { Subscriptable } from "./subscriptable"
 
 @Directive()
 export abstract class Formable<T = object> extends Subscriptable implements OnDestroy, AfterViewInit, AfterViewChecked{
-    @ViewChild(FormGroupDirective) formRef: FormGroupDirective
-    @ViewChildren(BaseFormInput) inputs: QueryList<BaseFormInput<unknown>>
+    @ViewChild(FormGroupDirective) protected formRef: FormGroupDirective
+    @ViewChildren(BaseFormInput) private inputs: QueryList<BaseFormInput<unknown>>
 
-    public loading$ = new BehaviorSubject(false)
+    protected loading$ = new BehaviorSubject(false)
     protected notificationService = inject(NotificationService)
     protected translateService = inject(TranslateService)
     protected cdr = inject(ChangeDetectorRef)
@@ -95,7 +95,7 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
         return false
     }
 
-    protected manualSubmit = () => this.formRef.ngSubmit.emit()
+    public manualSubmit = () => this.formRef.ngSubmit.emit()
 
     protected registerPasswordChanges = (passwordControlName: string, confirmPasswordControlName: string) => {
         this.addSubscription(this.formRef.form.get(passwordControlName).valueChanges.pipe(
@@ -114,4 +114,6 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
             this.formRef.form.get(passwordControlName).markAsTouched()
         }))
     }
+
+    public isLoading$ = () => this.loading$.asObservable()
 }
