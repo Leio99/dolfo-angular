@@ -1,6 +1,6 @@
 import { Component, inject, Input } from "@angular/core"
 import { DomSanitizer } from "@angular/platform-browser"
-import { ColumnDataType, GridColumn, GridConfig } from "../../../shared/interfaces"
+import { BooleanFn, ColumnDataType, GridColumn, GridConfig } from "../../../shared/interfaces"
 import { TranslateService } from "../../../shared/services"
 
 @Component({
@@ -52,5 +52,10 @@ export class GridComponent<T>{
 		}
 	}
 
-    public isToolbarBtnDisabled = (disabled: boolean | (() => boolean)) => typeof disabled === "boolean" ? disabled : disabled()
+    public isToolbarBtnDisabled = (disabled: boolean | BooleanFn) => {
+        if(disabled == null)
+            return false
+
+        return typeof disabled === "boolean" ? disabled : disabled()
+    }
 }

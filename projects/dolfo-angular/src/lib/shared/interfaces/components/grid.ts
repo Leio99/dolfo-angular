@@ -18,9 +18,11 @@ export interface GridAction{
     readonly onClick: () => void
 }
 
+export type BooleanFn = () => boolean
+
 export interface GridToolbarButton{
     readonly label: string
-    readonly disabled?: boolean | (() => boolean)
+    readonly disabled?: boolean | BooleanFn
     readonly icon?: string
     readonly onClick: () => void
 }
