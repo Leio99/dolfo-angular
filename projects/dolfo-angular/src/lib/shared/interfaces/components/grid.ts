@@ -114,6 +114,8 @@ export class GridConfig<T>{
     public getUniqueId = (item: T) => this.config.getItemKey(item)
 
     public isLoading$ = () => this.loading$.asObservable()
+    
+    public isLoading = () => this.loading$.getValue()
 
     public setLoading = (v: boolean) => this.loading$.next(v)
 
