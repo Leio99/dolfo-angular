@@ -9,9 +9,9 @@ export class DialogUtilsService{
     private dialogService = inject(DialogService)
     private translateService = inject(TranslateService)
 
-    public showLoading$ = <T, T2>(obs: (res: T2) => Observable<T>) => mergeMap<T2, ObservableInput<T>>(res => of(res).pipe(
+    public showLoading$ = <T, T2>(obs: (res: T2) => Observable<T>, message?: string) => mergeMap<T2, ObservableInput<T>>(res => of(res).pipe(
         delay(0),
-        tap(() => this.dialogService.showLoading().subscribe()),
+        tap(() => this.dialogService.showLoading(message).subscribe()),
         mergeMap(res => obs(res)),
         catchError(err => {
             this.closeLatestDialog()

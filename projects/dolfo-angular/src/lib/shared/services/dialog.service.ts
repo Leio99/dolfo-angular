@@ -34,9 +34,9 @@ export class DialogService{
         component
     })
 
-    public showLoading = (message = this.ts.translate("loading")) => this.openDialog({
+    public showLoading = (message?: string) => this.openDialog({
         type: "loading",
-        message
+        message: message || this.ts.translate("loading")
     })
 
     public close = () => {

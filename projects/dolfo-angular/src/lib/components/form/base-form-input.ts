@@ -42,7 +42,9 @@ export abstract class BaseFormInput<T> extends Subscriptable implements ControlV
         }))
     }
 
-    writeValue = (obj: T) => this.input.setValue(obj)
+    writeValue(obj: T){
+        this.input.setValue(obj)
+    }
 
     registerOnChange = (fn: (obj: T) => void) => this.changeInternal = fn
 

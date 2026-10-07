@@ -26,7 +26,7 @@
     }
 
     &.error{
-        input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"], input[type="number"], input[type="date"], .combobox{
+        input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"], input[type="number"], input[type="date"], input[type="file"], .combobox{
             border-color: $error !important;
             background-color: rgba(217, 16, 16, 0.07) !important
         }
@@ -37,7 +37,7 @@
         color: $error
     }
 
-    input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"], input[type="number"]{
+    input[type="text"], input[type="password"], input[type="email"], textarea, input[type="time"], input[type="number"], input[type="file"]{
         @include base-input;
 
         &:focus{
@@ -48,6 +48,34 @@
         &[disabled]{
             cursor: not-allowed;
             color: #666
+        }
+    }
+
+    input[type="file"]{
+        @include pointer;
+
+        &::file-selector-button{
+            @include rounded;
+            @include pointer;
+            margin-right: 0.5rem;
+            background-color: $primary;
+            border: 0;
+            color: $white;
+            padding: 0.3rem 0.5rem;
+
+            &:hover{
+                background-color: color.adjust($primary, $lightness: -10%)
+            }
+        }
+
+        &[disabled]::file-selector-button{
+            opacity: 0.7;
+            pointer-events: none
+        }
+
+        &.dragging{
+            border-style: dashed;
+            border-color: $primary
         }
     }
 

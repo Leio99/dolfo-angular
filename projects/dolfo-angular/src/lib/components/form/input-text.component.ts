@@ -26,7 +26,7 @@ export class InputTextComponent extends BaseFormInput<string | number> implement
     @Input() placeHolder = ""
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
-    @ViewChild("formInput") formInput: ElementRef<HTMLInputElement | HTMLTextAreaElement>
+    @ViewChild("formInput") private formInput: ElementRef<HTMLInputElement | HTMLTextAreaElement>
 
     public focus = () => this.formInput.nativeElement.focus()
 

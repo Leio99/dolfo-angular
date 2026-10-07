@@ -46,8 +46,8 @@ import { BaseFormInput } from "./base-form-input"
     ]
 })
 export class AutocompleteComponent extends BaseFormInput<any> implements AfterViewInit, OnFocus, OnBlur{
-    @ViewChild("autocomplete") autocomplete: ElementRef<HTMLDivElement>
-    @ViewChild("autocompleteInput") autocompleteInput: ElementRef<HTMLInputElement>
+    @ViewChild("autocomplete") private autocomplete: ElementRef<HTMLDivElement>
+    @ViewChild("autocompleteInput") private autocompleteInput: ElementRef<HTMLInputElement>
     @Input({ required: true }) config: AutocompleteConfig<any>
     @Input() minChars = 3
     @Input() resultTemplate: TemplateRef<any>

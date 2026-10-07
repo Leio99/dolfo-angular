@@ -38,7 +38,7 @@ import { BaseFormInput } from "./base-form-input"
     standalone: false
 })
 export class ComboboxComponent extends BaseFormInput<any | any[]> implements AfterViewInit, Required<ComboInput>, OnBlur, OnFocus, OnChanges{
-	@ViewChild("combo") combo: ElementRef<HTMLDivElement>
+	@ViewChild("combo") private combo: ElementRef<HTMLDivElement>
 	@Input({ required: true }) options: ComboOption[]
 	@Input() placeHolder: string
 	@Input({ transform: booleanAttribute }) multiple = false
