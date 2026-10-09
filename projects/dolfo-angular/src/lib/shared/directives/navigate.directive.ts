@@ -47,5 +47,8 @@ export class NavigateDirective extends Subscriptable{
             this.elementRef.nativeElement.setAttribute("href", this.url)
     }
 
-    private openBlank = () => window.open(this.publicUrl + this.url, "_blank")
+    private openBlank = () => {
+        const url = this.elementRef.nativeElement.getAttribute("href") || (this.publicUrl + this.url)
+        window.open(url, "_blank")
+    }
 }
