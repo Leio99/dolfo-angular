@@ -79,7 +79,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         }))
 
         this.addSubscription(this.input.valueChanges.pipe(
-            filter(v => v != null && !!this.autocompleteInput && (this.autocompleteInput.nativeElement.value !== this.currentOptionLabel() || !this.currentOptionLabel()))
+            filter(v => v != null && !!this.autocompleteInput && (this.autocompleteInput.nativeElement.value !== this.config.getLabel(v) || !this.currentOptionLabel()))
         ).subscribe(value => this.setOption({ value, label: this.config.getLabel(value) }, true)))
 
         this.addSubscription(this.input.valueChanges.pipe(
