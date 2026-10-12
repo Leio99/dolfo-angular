@@ -70,20 +70,17 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
             this.ngAfterViewInit()
     }
 
-    saveControlsState(control: AbstractControl) {
+    private saveControlsState = (control: AbstractControl) => {
         if (control instanceof FormGroup || control instanceof FormArray) {
             const currentState: { [key: string]: any } = {}
             Object.keys(control.controls).forEach(key => currentState[key] = this.saveControlsState(control.get(key)))
             
             return currentState
-        } else {
-            // Ritorna true se il controllo è abilitato, false se è disabilitato
+        } else 
             return control.enabled
-        }
     }
 
-    // Ripristina lo stato ricorsivamente
-    restoreControlsState(control: AbstractControl, savedState: any) {
+    private restoreControlsState = (control: AbstractControl, savedState: any) => {
         if (control instanceof FormGroup || control instanceof FormArray) {
             Object.keys(control.controls).forEach(key => {
                 if (savedState[key] !== undefined)
