@@ -9,9 +9,9 @@ import { BaseFormInput } from "./base-form-input"
     selector: "dolfo-input-text",
     template: `<dolfo-input-container>
         @if(type === "textarea"){
-            <textarea #formInput [name]="formControlName" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder"></textarea>
+            <textarea #formInput [name]="formControlName" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" (keyup)="onKeyUp.emit($event)" (keydown)="onKeyDown.emit($event)"></textarea>
         }@else{
-            <input #formInput [name]="formControlName" [type]="type" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" />
+            <input #formInput [name]="formControlName" [type]="type" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" (keyup)="onKeyUp.emit($event)" (keydown)="onKeyDown.emit($event)" />
         }
     </dolfo-input-container>`,
     providers: [
@@ -26,6 +26,8 @@ export class InputTextComponent extends BaseFormInput<string | number> implement
     @Input() placeHolder = ""
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
+    @Output() onKeyUp = new EventEmitter<KeyboardEvent>()
+    @Output() onKeyDown = new EventEmitter<KeyboardEvent>()
     @ViewChild("formInput") private formInput: ElementRef<HTMLInputElement | HTMLTextAreaElement>
 
     public focus = () => this.formInput.nativeElement.focus()

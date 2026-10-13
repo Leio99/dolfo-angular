@@ -1,6 +1,6 @@
 {
     "name": "dolfo-angular",
-    "version": "1.243.0",
+    "version": "1.244.0",
     "scripts": {
         "update-version": "npm --no-git-tag-version version minor"
     },
