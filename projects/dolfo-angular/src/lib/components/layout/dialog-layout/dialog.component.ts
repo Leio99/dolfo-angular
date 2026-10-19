@@ -69,7 +69,9 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
     protected dialogService = inject(DialogService)
     private sanitizer = inject(DomSanitizer)
 
-    ngOnInit() {
+    override ngOnInit() {
+        super.ngOnInit()
+        
         if(this.form){
             this.formGroup = new FormGroup({})
             this.form.forEach(f => this.formGroup.addControl(f.name, f.control))

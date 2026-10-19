@@ -18,13 +18,12 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
 
     protected abstract submit: (_formValue: T) => Observable<unknown>
 
-    ngAfterViewInit() {
-        if (!this.formRef) return
-
+    ngOnInit(){
         let state: any
 
         this.addSubscription(this.loading$.pipe(
-            distinctUntilChanged()
+            distinctUntilChanged(),
+            filter(() => !!this.formRef)
         ).subscribe(loading => {
             if (loading){
                 state = this.saveControlsState(this.formRef.form)
@@ -38,6 +37,13 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
                 }
             }
         }))
+
+        this.addSubscription(this.translateService.getLang$().subscribe(() => this.cdr.detectChanges()))
+    }
+
+    ngAfterViewInit() {
+        if (!this.formRef)
+            return
 
         this.subForm = this.formRef.ngSubmit.pipe(
             tap(() => this.findInForm(this.formRef.form)),
@@ -58,8 +64,6 @@ export abstract class Formable<T = object> extends Subscriptable implements OnDe
         ).subscribe()
 
         this.addSubscription(this.subForm)
-
-        this.addSubscription(this.translateService.getLang$().subscribe(() => this.cdr.detectChanges()))
     }
 
     ngAfterViewChecked() {
