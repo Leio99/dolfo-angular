@@ -10,7 +10,7 @@ import { BaseFormInput } from "./base-form-input"
     template: `<dolfo-input-container>
         <div class="combobox autocomplete" [class.opened]="opened()" #autocomplete>
             <div class="combobox-label">
-                <input #autocompleteInput type="text" [value]="currentOption()" (focus)="focus($event)" (blur)="onBlur.emit($event)" />
+                <input #autocompleteInput [placeholder]="placeHolder" type="text" [value]="currentOption()" (focus)="focus($event)" (blur)="onBlur.emit($event)" />
             </div>
 
             <div class="combobox-options" [class.opened]="opened()">
@@ -51,6 +51,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
     @Input({ required: true }) config: AutocompleteConfig<any>
     @Input() minChars = 3
     @Input() resultTemplate: TemplateRef<any>
+    @Input() placeHolder: string
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
 
