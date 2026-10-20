@@ -11,7 +11,7 @@ import { DialogService } from "../../../shared/services"
     standalone: false,
     template: `<dolfo-dialog-layout [width]="width" [ngClass]="className">
         @if(title){
-            <dolfo-dialog-header [title]="title" [showCloseX]="showCloseX()" [icon]="getIcon()"></dolfo-dialog-header>
+            <dolfo-dialog-header [title]="title" [showCloseX]="showCloseX()" [icon]="icon || getIcon()"></dolfo-dialog-header>
         }
 
         <dolfo-dialog-content>
@@ -58,6 +58,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
     @Input() title: string
     @Input({ required: true }) message: string
     @Input() type: DialogType = "info"
+    @Input() icon: DialogIcon
     @Input() width: number
     @Input() hideCloseX = false
     @Input() form: DialogForm
@@ -78,7 +79,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
         }
     }
 
-    protected submit = (formValue: any): Observable<unknown> => of(this.close(DialogActionType.OK, formValue))
+    protected submit = (formValue: any): Observable<unknown> => of(formValue)
 
     public getIcon = (): DialogIcon => {
         if(this.type === "info")
@@ -99,7 +100,7 @@ export class DialogComponent extends Formable implements Required<IDialogInput>,
                 return
         }
 
-        this.dialogService.action({ type, data: data != null ? data : this.formGroup?.getRawValue() })
+        this.dialogService.action({ type, data: data ?? this.formGroup?.getRawValue() })
         this.dialogService.close()
     }
 

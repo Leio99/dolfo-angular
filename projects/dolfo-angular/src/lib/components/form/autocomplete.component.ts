@@ -51,7 +51,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
     @Input({ required: true }) config: AutocompleteConfig<any>
     @Input() minChars = 3
     @Input() resultTemplate: TemplateRef<any>
-    @Input() placeHolder: string
+    @Input() placeHolder = ""
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
 

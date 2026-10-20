@@ -14,7 +14,7 @@ export class DialogUtilsService{
         tap(() => this.dialogService.showLoading(message).subscribe()),
         mergeMap(res => obs(res)),
         catchError(err => {
-            this.closeLatestDialog()
+            this.hideLoading()
             return throwError(() => err)
         })
     ))

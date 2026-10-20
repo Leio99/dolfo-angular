@@ -26,6 +26,7 @@ export type DialogType = "info" | "confirm" | "loading" | "error"
 
 export type IDialogInput = {
     title?: string
+    icon?: DialogIcon
     message: string
     type?: DialogType
     width?: number
