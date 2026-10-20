@@ -9,9 +9,9 @@ import { BaseFormInput } from "./base-form-input"
     selector: "dolfo-input-text",
     template: `<dolfo-input-container>
         @if(type === "textarea"){
-            <textarea #formInput [name]="formControlName" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" (keyup)="onKeyUp.emit($event)" (keydown)="onKeyDown.emit($event)"></textarea>
+            <textarea #formInput [name]="formControlName" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" (keyup)="onKeyUp.emit($event)" (keydown)="onKeyDown.emit($event)" [autocomplete]="autoComplete"></textarea>
         }@else{
-            <input #formInput [name]="formControlName" [type]="type" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" (keyup)="onKeyUp.emit($event)" (keydown)="onKeyDown.emit($event)" />
+            <input #formInput [name]="formControlName" [type]="type" [formControl]="input" (focus)="onFocus.emit($event)" (blur)="onBlur.emit($event)" [placeholder]="placeHolder" (keyup)="onKeyUp.emit($event)" (keydown)="onKeyDown.emit($event)" [autocomplete]="autoComplete" />
         }
     </dolfo-input-container>`,
     providers: [
@@ -24,6 +24,7 @@ import { BaseFormInput } from "./base-form-input"
 export class InputTextComponent extends BaseFormInput<string | number> implements OnFocus, OnBlur{
     @Input() type: InputType = "text"
     @Input() placeHolder = ""
+    @Input() autoComplete: string
     @Output() onFocus = new EventEmitter<FocusEvent>()
     @Output() onBlur = new EventEmitter<FocusEvent>()
     @Output() onKeyUp = new EventEmitter<KeyboardEvent>()
@@ -31,6 +32,8 @@ export class InputTextComponent extends BaseFormInput<string | number> implement
     @ViewChild("formInput") private formInput: ElementRef<HTMLInputElement | HTMLTextAreaElement>
 
     public focus = () => this.formInput.nativeElement.focus()
+
+    public blur = () => this.formInput.nativeElement.blur()
 
     override ngAfterViewInit() {
         if(this.type !== "number")
