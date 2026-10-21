@@ -14,10 +14,10 @@ export class GridComponent<T>{
     private sanitizer = inject(DomSanitizer)
 
 	public resolveField = (item: T, { field, formatter, dataType, onLink }: GridColumn) => {
-        let value = field
+        let value = field === "." ? item as any : field
             .toString()
             .split(".")
-            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item) as string || item as any
+            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item) as string
 
         if(dataType === ColumnDataType.DATE)
 			value = this.translateService.formatDate(value)
@@ -36,10 +36,10 @@ export class GridComponent<T>{
 		if(col.dataType !== ColumnDataType.LINK || !col.onLink)
 			return
 
-		const colValue = col.field
+		const colValue = col.field === "." ? item : col.field
             .toString()
             .split(".")
-            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item) || item,
+            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item),
 		htmlTarget = e.target as HTMLElement
 
 		if(htmlTarget.tagName.toLowerCase() === "a")
