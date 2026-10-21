@@ -17,7 +17,7 @@ export class GridComponent<T>{
         let value = field
             .toString()
             .split(".")
-            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item) as string
+            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item) as string || item as any
 
         if(dataType === ColumnDataType.DATE)
 			value = this.translateService.formatDate(value)
@@ -39,7 +39,7 @@ export class GridComponent<T>{
 		const colValue = col.field
             .toString()
             .split(".")
-            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item),
+            .reduce((prev, curr) => prev?.[curr as keyof T] as any, item) || item,
 		htmlTarget = e.target as HTMLElement
 
 		if(htmlTarget.tagName.toLowerCase() === "a")
