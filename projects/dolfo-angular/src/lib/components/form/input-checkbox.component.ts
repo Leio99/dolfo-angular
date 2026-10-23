@@ -19,5 +19,8 @@ import { BaseFormInput } from "./base-form-input"
     ]
 })
 export class InputCheckboxComponent extends BaseFormInput<boolean> {
-    public toggleCheck = () => this.input.setValue(!this.input.value)
+    public toggleCheck = () => {
+        if(!this.input.disabled)
+            this.input.setValue(!this.input.value)
+    }
 }
