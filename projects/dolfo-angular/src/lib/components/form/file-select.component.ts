@@ -14,9 +14,9 @@ import { BaseFormInput } from "./base-form-input"
 		{ provide: NG_VALIDATORS, useExisting: forwardRef(() => FileSelectComponent), multi: true },
 		{ provide: BaseFormInput, useExisting: FileSelectComponent }
 	],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.Eager
 })
-export class FileSelectComponent extends BaseFormInput<FileList> implements OnFocus, OnBlur{
+export class FileSelectComponent extends BaseFormInput<FileList | File[]> implements OnFocus, OnBlur{
     @ViewChild("formInput") private formInput: ElementRef<HTMLInputElement>
 	@Output() onFocus = new EventEmitter<FocusEvent>()
 	@Output() onBlur = new EventEmitter<FocusEvent>()
@@ -27,7 +27,7 @@ export class FileSelectComponent extends BaseFormInput<FileList> implements OnFo
 
     public changeFiles = (e: Event) => {
         if(!this.input.disabled)
-            this.control.setValue((e.target as HTMLInputElement).files)
+            this.input.setValue((e.target as HTMLInputElement).files)
     }
 
     override writeValue = (obj: FileList) => {
@@ -56,8 +56,19 @@ export class FileSelectComponent extends BaseFormInput<FileList> implements OnFo
 
         const validFiles = Array.from(rawFiles).filter(f => this.isValidFile(f))
 
-        if (validFiles.length > 0)
-            this.control.setValue(validFiles)
+        if (validFiles.length > 0){
+            this.input.setValue(validFiles)
+
+            const dataTransfer = new DataTransfer()
+            
+            for(const f of validFiles)
+                dataTransfer.items.add(f)
+
+            this.formInput.nativeElement.files = dataTransfer.files
+        }else{
+            this.input.setValue(null)
+            this.formInput.nativeElement.value = null
+        }
 
         this.dragging.set(false)
     }
