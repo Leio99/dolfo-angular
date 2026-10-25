@@ -63,6 +63,7 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
     public currentFocus = signal<number>(null)
     private keyDown = false
     private keyDownTimeout: ReturnType<typeof setTimeout>
+    private preInitValue: any
 
     constructor(){
         super()
@@ -80,8 +81,16 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
         }))
 
         this.addSubscription(this.input.valueChanges.pipe(
-            filter(v => v != null && !!this.autocompleteInput && (this.autocompleteInput.nativeElement.value !== this.config.getLabel(v) || !this.currentOptionLabel()))
-        ).subscribe(value => this.setOption({ value, label: this.config.getLabel(value) }, true)))
+            filter(v => v != null && (
+                (!!this.autocompleteInput && (this.autocompleteInput.nativeElement.value !== this.config.getLabel(v) || !this.currentOptionLabel())) ||
+                !this.autocompleteInput
+            ))
+        ).subscribe(value => {
+            if(!this.autocompleteInput)
+                this.preInitValue = value
+            else
+                this.setOption({ value, label: this.config.getLabel(value) }, true)
+        }))
 
         this.addSubscription(this.input.valueChanges.pipe(
             filter(v => v == null && !!this.autocompleteInput && this.autocompleteInput.nativeElement.value != null && this.autocompleteInput.nativeElement.value !== "")
@@ -94,6 +103,11 @@ export class AutocompleteComponent extends BaseFormInput<any> implements AfterVi
 
     override ngAfterViewInit() {
         super.ngAfterViewInit()
+
+        if(this.preInitValue != null){
+            this.setOption({ value: this.preInitValue, label: this.config.getLabel(this.preInitValue) }, true)
+            this.preInitValue = null
+        }
 
         this.addSubscription(fromEvent(this.autocompleteInput.nativeElement, "input").pipe(
             map(ev => (ev.target as HTMLInputElement).value),
