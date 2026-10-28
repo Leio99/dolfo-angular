@@ -10,13 +10,14 @@ import { DatepickerComponent } from "./datepicker.component"
 import { FileSelectComponent } from "./file-select.component"
 import { FormComponent } from "./form.component"
 import { InputCheckboxComponent } from "./input-checkbox.component"
+import { InputColorComponent } from "./input-color.component"
 import { InputContainerComponent } from "./input-container.component"
 import { InputRadioComponent } from "./input-radio.component"
 import { InputTextComponent } from "./input-text.component"
 
 @NgModule({
-    declarations: [InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent, InputCheckboxComponent, FileSelectComponent, FormComponent],
+    declarations: [InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent, InputCheckboxComponent, FileSelectComponent, FormComponent, InputColorComponent],
     imports: [CommonModule, ReactiveFormsModule, TranslatePipe, DirectivesModule, LayoutModule],
-    exports: [ReactiveFormsModule, InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent, InputCheckboxComponent, FileSelectComponent, FormComponent]
+    exports: [ReactiveFormsModule, InputTextComponent, InputContainerComponent, ComboboxComponent, DatepickerComponent, AutocompleteComponent, InputRadioComponent, InputCheckboxComponent, FileSelectComponent, FormComponent, InputColorComponent]
 })
 export class FormModule {}
