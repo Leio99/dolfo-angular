@@ -56,5 +56,4 @@ export * from "./lib/shared/directives/tooltip.directive"
 export * from "./lib/shared/services"
 
 // Pipes
-export * from "./lib/shared/pipes/translate.pipe"
-
+export * from "./lib/shared/pipes"
